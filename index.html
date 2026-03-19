@@ -1314,32 +1314,34 @@ terraform fmt -write=false             # Check without modifying
         <section id="decision-tree">
             <h2>🌳 COMMAND DECISION TREE</h2>
             <div class="decision-tree">
-Need to create/modify infrastructure?
-├─ First time? → <strong>terraform init</strong>
-├─ Check syntax? → <strong>terraform validate</strong>
-├─ Preview changes? → <strong>terraform plan -out=tfplan</strong>
-├─ Apply changes? → <strong>terraform apply tfplan</strong>
-└─ Done
+Need to create/modify infrastructure? </br>
+├─ First time? → <strong>terraform init</strong> </br>
+├─ Check syntax? → <strong>terraform validate</strong> </br>
+├─ Preview changes? → <strong>terraform plan -out=tfplan</strong> </br>
+├─ Apply changes? → <strong>terraform apply tfplan</strong> </br>
+└─ Done</br>
+</br>
+</br>
 
-Need to destroy infrastructure?
-├─ Destroy everything? → <strong>terraform destroy</strong>
-├─ Destroy one resource? → <strong>terraform destroy -target=resource</strong>
-└─ Keep in cloud, remove from Terraform? → <strong>terraform state rm</strong>
+Need to destroy infrastructure?</br>
+├─ Destroy everything? → <strong>terraform destroy</strong></br>
+├─ Destroy one resource? → <strong>terraform destroy -target=resource</strong></br>
+└─ Keep in cloud, remove from Terraform? → <strong>terraform state rm</strong></br>
+</br></br>
+Need to manage existing infrastructure?</br>
+├─ Add to Terraform? → <strong>terraform import</strong></br>
+├─ Fix state? → <strong>terraform state [list|show|rm|mv]</strong></br>
+└─ Check drift? → <strong>terraform plan -refresh-only</strong></br>
+</br></br>
+Code style issues?</br>
+└─ Fix formatting → <strong>terraform fmt -recursive</strong></br></br>
 
-Need to manage existing infrastructure?
-├─ Add to Terraform? → <strong>terraform import</strong>
-├─ Fix state? → <strong>terraform state [list|show|rm|mv]</strong>
-└─ Check drift? → <strong>terraform plan -refresh-only</strong>
+Team collaboration?</br>
+└─ Switch to HCP Terraform (local workspaces are NOT shared)</br></br>
 
-Code style issues?
-└─ Fix formatting → <strong>terraform fmt -recursive</strong>
-
-Team collaboration?
-└─ Switch to HCP Terraform (local workspaces are NOT shared)
-
-Multiple environments?
-├─ Local: <strong>terraform workspace [new|select]</strong>
-└─ Team: HCP Terraform projects & workspaces
+Multiple environments?</br>
+├─ Local: <strong>terraform workspace [new|select]</strong></br>
+└─ Team: HCP Terraform projects & workspaces</br>
             </div>
 
             <h3>48-HOUR EXAM PREP FOCUS</h3>

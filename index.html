@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraform Associate 004 - Command & Strategy Cheat Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #5e4fa2;
+            --secondary-color: #2e8b57;
+            --accent-color: #ff6b6b;
+            --warning-color: #ffc107;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --code-bg: #f5f5f5;
+            --highlight-bg: #fff3cd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 100;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Section */
+        section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        section > h2 {
+            color: var(--primary-color);
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        section > h3 {
+            color: var(--secondary-color);
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        section > h4 {
+            color: var(--text-color);
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        /* Command Header */
+        .command-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, rgba(94, 79, 162, 0.8) 100%);
+            color: white;
+            padding: 20px;
+            margin: 30px 0 20px 0;
+            border-radius: 8px;
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .command-header h3 {
+            color: white;
+            margin-top: 0;
+        }
+
+        /* Code Block */
+        code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: #d63384;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        table thead {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+
+        table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        table tbody tr:nth-child(odd) {
+            background-color: #fafafa;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Highlights */
+        .highlight-success {
+            background-color: #d4edda;
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #155724;
+        }
+
+        .highlight-danger {
+            background-color: #f8d7da;
+            border-left: 4px solid var(--danger-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #721c24;
+        }
+
+        .highlight-warning {
+            background-color: #fff3cd;
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #856404;
+        }
+
+        .highlight-info {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #0c5460;
+        }
+
+        /* Emoji and icons */
+        .emoji {
+            margin-right: 8px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+        }
+
+        .badge-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .badge-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .badge-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: var(--warning-color);
+            color: #333;
+        }
+
+        /* Command Grid */
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .command-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .command-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .command-card h4 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        /* Syntax Table */
+        .syntax-table {
+            background: var(--code-bg);
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid var(--primary-color);
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        /* Decision Tree */
+        .decision-tree {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            border-radius: 8px;
+        }
+
+        /* Print Styles */
+        @media print {
+            nav {
+                position: static;
+            }
+            body {
+                background: white;
+            }
+            section {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .command-grid {
+                grid-template-columns: 1fr;
+            }
+            section {
+                padding: 15px;
+            }
+        }
+
+        /* Tier Colors */
+        .tier-1 { border-left-color: #ff6b6b; }
+        .tier-2 { border-left-color: #ffc107; }
+        .tier-3 { border-left-color: #17a2b8; }
+
+        .tier-label {
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+        }
+
+        .tier-1 .tier-label { color: #ff6b6b; }
+        .tier-2 .tier-label { color: #ffc107; }
+        .tier-3 .tier-label { color: #17a2b8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🎯 TERRAFORM ASSOCIATE 004</h1>
+            <p>Command & Strategy Cheat Sheet - High-Intensity Exam Preparation</p>
+            <p style="margin-top: 10px; font-size: 0.95em;">For Test-Takers with 48 Hours to Exam</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <ul>
+                <li><a href="#commands">Core Commands</a></li>
+                <li><a href="#advanced">Advanced</a></li>
+                <li><a href="#hcp">HCP Terraform</a></li>
+                <li><a href="#quick-ref">Quick Reference</a></li>
+                <li><a href="#decision-tree">Decision Tree</a></li>
+            </ul>
+        </nav>
+
+        <!-- Core Workflow Commands Section -->
+        <section id="commands">
+            <h2>📌 CORE WORKFLOW COMMANDS</h2>
+
+            <!-- terraform init -->
+            <div class="command-header">
+                <h3>1. terraform init</h3>
+            </div>
+
+            <h4>SYNTAX & EXAM-CRITICAL FLAGS</h4>
+            <div class="syntax-table">
+# Base syntax<br>
+terraform init [options]<br><br>
+
+# Exam-relevant flags:<br>
+terraform init -backend=false          # Skip backend init<br>
+terraform init -upgrade                # Upgrade provider versions<br>
+terraform init -reconfigure            # Reconfigure backend
+            </div>
+
+            <h4>UNDER THE HOOD - FILES & OPERATIONS</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>File/Component</th>
+                        <th>What Happens</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>.terraform/</code></td>
+                        <td>Created; stores downloaded providers (binary plugins)</td>
+                    </tr>
+                    <tr>
+                        <td><code>.terraform.lock.hcl</code></td>
+                        <td>Created/updated; locks exact provider versions (ALWAYS commit to Git)</td>
+                    </tr>
+                    <tr>
+                        <td><code>backend config</code></td>
+                        <td>Remote backend initialized if configured</td>
+                    </tr>
+                    <tr>
+                        <td>Network</td>
+                        <td><strong>YES</strong> - downloads providers from Terraform Registry</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>State Impact:</strong> No state file created until <code>terraform apply</code></p>
+
+            <h4>004 SPECIFIC UPDATES</h4>
+            <ul>
+                <li><strong>Provider dependency lock:</strong> The lock file is now mandatory for reproducible builds</li>
+                <li><strong>Backend migration:</strong> <code>-reconfigure</code> flag used when changing backends</li>
+                <li><strong>Ephemeral values:</strong> Introduced in 1.8; don't affect init</li>
+            </ul>
+
+            <h4>EXAM GOTCHA</h4>
+            <div class="highlight-danger">
+                <strong>Question:</strong> "Can you run <code>terraform validate</code> before <code>terraform init</code>?"<br><br>
+                <strong>Answer:</strong> ❌ <strong>NO</strong> (Common trap!)<br>
+                • Before init, the <code>.terraform/</code> directory doesn't exist<br>
+                • Terraform doesn't know which providers to use<br>
+                • <code>validate</code> will fail<br>
+                • <strong>Order is ALWAYS:</strong> <code>init</code> → <code>validate</code> → <code>plan</code> → <code>apply</code>
+            </div>
+
+            ---
+
+            <!-- terraform validate -->
+            <div class="command-header">
+                <h3>2. terraform validate</h3>
+            </div>
+
+            <h4>SYNTAX & EXAM-CRITICAL FLAGS</h4>
+            <div class="syntax-table">
+# Base syntax<br>
+terraform validate<br><br>
+
+# Exam-relevant flags:<br>
+terraform validate -json              # Output in JSON
+            </div>
+
+            <h4>UNDER THE HOOD - FILES & OPERATIONS</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Prerequisites</td>
+                        <td>Requires <code>.terraform/</code> (must run <code>init</code> first)</td>
+                    </tr>
+                    <tr>
+                        <td>Network</td>
+                        <td><strong>NO</strong> - purely local</td>
+                    </tr>
+                    <tr>
+                        <td>State File</td>
+                        <td><strong>NO</strong> - doesn't read or modify</td>
+                    </tr>
+                    <tr>
+                        <td>Files Checked</td>
+                        <td>All <code>.tf</code> files in working directory + modules</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-warning">
+                <strong>What it validates:</strong><br>
+                ✅ HCL syntax correctness<br>
+                ✅ Resource block structure<br>
+                ✅ Variable type constraints<br>
+                ✅ Output definitions<br>
+                ❌ Does NOT validate: Actual cloud permissions, API connectivity
+            </div>
+
+            <h4>EXAM GOTCHA</h4>
+            <div class="highlight-danger">
+                <strong>Question:</strong> "You run <code>terraform validate</code> and it passes. What does this guarantee?"<br><br>
+                <strong>Answer:</strong> ❌ Only syntax is correct<br>
+                ✅ HCL syntax is valid<br>
+                ❌ Variables exist in <code>terraform.tfvars</code><br>
+                ❌ Cloud resources can actually be created<br>
+                ❌ Authentication will work
+            </div>
+
+            ---
+
+            <!-- terraform plan -->
+            <div class="command-header">
+                <h3>3. terraform plan</h3>
+            </div>
+
+            <h4>SYNTAX & EXAM-CRITICAL FLAGS</h4>
+            <div class="syntax-table">
+# Base syntax<br>
+terraform plan [options] [plan file]<br><br>
+
+# EXAM-CRITICAL FLAGS:<br>
+terraform plan -out=tfplan              # Save plan to file<br>
+terraform plan -destroy                 # Plan resource destruction<br>
+terraform plan -refresh-only            # Reconcile state with reality<br>
+terraform plan -replace="resource.id"   # Force replacement<br>
+terraform plan -target="resource.id"    # Plan for specific resource<br>
+terraform plan -var="key=value"         # Pass variables<br>
+terraform plan -input=false             # Fail if variables prompt needed
+            </div>
+
+            <h4>UNDER THE HOOD - FILES & OPERATIONS</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>State File</td>
+                        <td>READ ONLY (unless <code>-refresh-only</code>)</td>
+                    </tr>
+                    <tr>
+                        <td>Refresh Phase</td>
+                        <td>By default, refreshes state to match reality</td>
+                    </tr>
+                    <tr>
+                        <td>Lock</td>
+                        <td>Acquires read lock on state</td>
+                    </tr>
+                    <tr>
+                        <td>Network</td>
+                        <td><strong>YES</strong> - queries cloud provider API</td>
+                    </tr>
+                    <tr>
+                        <td>Plan File</td>
+                        <td><code>-out=tfplan</code> saves plan in binary format</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>004 SPECIFIC UPDATES</h4>
+            <ul>
+                <li><strong>Terraform Cloud plan policy:</strong> Plans checked against policy-as-code</li>
+                <li><strong>Check blocks:</strong> Output includes results of <code>check {}</code> blocks</li>
+                <li><strong>Moved blocks:</strong> Plan shows "no changes" if resource moved</li>
+                <li><strong>Sensitive output:</strong> Terraform masks sensitive values by default</li>
+            </ul>
+
+            <h4>EXAM GOTCHA</h4>
+            <div class="highlight-danger">
+                <strong>Question:</strong> "You save a plan with <code>-out=tfplan</code>, then run <code>terraform apply tfplan</code>. What's true?"<br><br>
+                ✅ Apply uses exact plan from the file (reproducible)<br>
+                ✅ No additional prompts for variable values<br>
+                ✅ Plan can't be changed mid-execution<br><br>
+                <strong>Trap:</strong> Running plan twice without using saved plan means variables could be different on second plan
+            </div>
+
+            ---
+
+            <!-- terraform apply -->
+            <div class="command-header">
+                <h3>4. terraform apply</h3>
+            </div>
+
+            <h4>SYNTAX & EXAM-CRITICAL FLAGS</h4>
+            <div class="syntax-table">
+# Base syntax<br>
+terraform apply [options] [plan-file]<br><br>
+
+# EXAM-CRITICAL FLAGS:<br>
+terraform apply tfplan                  # Apply specific plan file<br>
+terraform apply -auto-approve           # Skip interactive approval<br>
+terraform apply -refresh-only           # Reconcile state without modifying<br>
+terraform apply -destroy                # Destroy all resources<br>
+terraform apply -target="resource.id"   # Apply for specific resource<br>
+terraform apply -lock-timeout=5m        # Wait for state lock
+            </div>
+
+            <h4>UNDER THE HOOD - FILES & OPERATIONS</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>State File</td>
+                        <td>WRITE - modifications only on successful completion</td>
+                    </tr>
+                    <tr>
+                        <td>State Lock</td>
+                        <td>Acquires full lock (blocks other terraform commands)</td>
+                    </tr>
+                    <tr>
+                        <td>Atomicity</td>
+                        <td><strong>NOT atomic</strong> - partial updates possible</td>
+                    </tr>
+                    <tr>
+                        <td>Rollback</td>
+                        <td>NO automatic rollback</td>
+                    </tr>
+                    <tr>
+                        <td>Network</td>
+                        <td><strong>YES</strong> - makes actual API calls</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-danger">
+                <strong>Critical:</strong> If apply fails partway:<br>
+                ✅ Some resources created, others not<br>
+                ✅ State file reflects what was created<br>
+                ❌ NO rollback happens<br>
+                You must manually fix and re-apply
+            </div>
+
+            <h4>EXAM GOTCHA</h4>
+            <div class="highlight-danger">
+                <strong>Question:</strong> "You run <code>terraform apply</code> without a saved plan file. What happens?"<br><br>
+                <strong>Answer:</strong> ⚠️ <strong>TRAP</strong> - Variables are re-prompted<br>
+                If you don't use saved plan file, <code>apply</code> regenerates the plan<br>
+                If you don't re-provide <code>-var</code> values, Terraform prompts you<br>
+                <strong>Result:</strong> Actual infrastructure might DIFFER from what you planned<br><br>
+                <strong>Safe approach:</strong><br>
+                <code>terraform plan -out=tfplan</code><br>
+                <code>terraform apply tfplan</code>  (Guaranteed to use exact plan)
+            </div>
+
+            ---
+
+            <!-- terraform destroy -->
+            <div class="command-header">
+                <h3>5. terraform destroy</h3>
+            </div>
+
+            <h4>SYNTAX & EXAM-CRITICAL FLAGS</h4>
+            <div class="syntax-table">
+# Base syntax<br>
+terraform destroy [options]<br><br>
+
+# EXAM-CRITICAL FLAGS:<br>
+terraform destroy -auto-approve        # Skip confirmation<br>
+terraform destroy -target="resource"   # Destroy only specific resource<br>
+terraform destroy -lock=false          # Emergency only
+            </div>
+
+            <h4>UNDER THE HOOD - FILES & OPERATIONS</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>State File</td>
+                        <td>WRITE - removes destroyed resources from state</td>
+                    </tr>
+                    <tr>
+                        <td>Confirmation</td>
+                        <td>Interactive prompt (unless <code>-auto-approve</code>)</td>
+                    </tr>
+                    <tr>
+                        <td>Execution Order</td>
+                        <td>Reverse dependency order</td>
+                    </tr>
+                    <tr>
+                        <td>API Calls</td>
+                        <td><strong>YES</strong> - actual deletion calls</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>EXAM GOTCHA</h4>
+            <div class="highlight-warning">
+                <strong>Question:</strong> "You deleted an AWS EC2 instance manually, then run <code>terraform destroy</code>. What happens?"<br><br>
+                <strong>Answer:</strong> ✅ No error—Terraform destroys what's in the state file<br>
+                • State file says instance exists<br>
+                • Terraform tries to destroy it<br>
+                • AWS returns "resource not found"<br>
+                • Terraform removes from state (treats as success)
+            </div>
+
+            ---
+
+            <!-- terraform state -->
+            <div class="command-header">
+                <h3>6. terraform state</h3>
+            </div>
+
+            <h4>SYNTAX & EXAM-CRITICAL FLAGS</h4>
+            <div class="syntax-table">
+terraform state list                    # List all resources<br>
+terraform state show resource_type.name # Show specific resource<br>
+terraform state rm resource_type.name   # Remove from state<br>
+terraform state mv old.name new.name    # Rename/move resource<br>
+terraform state replace-provider old new # Replace provider<br>
+terraform state pull > backup.tfstate   # Save state locally<br>
+terraform state push backup.tfstate     # Restore from backup
+            </div>
+
+            <h4>UNDER THE HOOD - FILES & OPERATIONS</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>State Lock</td>
+                        <td>Acquired for <code>rm</code>, <code>mv</code>, <code>replace-provider</code></td>
+                    </tr>
+                    <tr>
+                        <td>Cloud API</td>
+                        <td><strong>NO</strong> API calls; purely state manipulation</td>
+                    </tr>
+                    <tr>
+                        <td>Backup</td>
+                        <td>Terraform creates automatic backup before modifications</td>
+                    </tr>
+                    <tr>
+                        <td>Remote State</td>
+                        <td>Works with remote backends</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>State Command Use Cases</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Use Case</th>
+                        <th>Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>list</code></td>
+                        <td>Audit resources</td>
+                        <td>LOW—read-only</td>
+                    </tr>
+                    <tr>
+                        <td><code>show</code></td>
+                        <td>Inspect single resource</td>
+                        <td>LOW—read-only</td>
+                    </tr>
+                    <tr>
+                        <td><code>rm</code></td>
+                        <td>Stop managing resource</td>
+                        <td>HIGH—breaks tracking</td>
+                    </tr>
+                    <tr>
+                        <td><code>mv</code></td>
+                        <td>Refactor resource names</td>
+                        <td>MEDIUM—requires care</td>
+                    </tr>
+                    <tr>
+                        <td><code>replace-provider</code></td>
+                        <td>Migrate provider</td>
+                        <td>MEDIUM—can cause issues</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>EXAM GOTCHA</h4>
+            <div class="highlight-danger">
+                <strong>Question:</strong> "You run <code>terraform state rm aws_instance.web</code>. What happens?"<br><br>
+                <strong>Answer:</strong> ❌ Resource is NOT deleted from AWS<br>
+                ✅ Instance is REMOVED from Terraform state file<br>
+                ✅ Next terraform apply won't manage it<br>
+                Instance keeps running in AWS (orphaned)<br><br>
+                <strong>Recovery:</strong> Use <code>terraform state push backup.tfstate.backup</code>
+            </div>
+
+            ---
+
+            <!-- terraform workspace -->
+            <div class="command-header">
+                <h3>7. terraform workspace</h3>
+            </div>
+
+            <h4>SYNTAX & EXAM-CRITICAL FLAGS</h4>
+            <div class="syntax-table">
+terraform workspace list                # List all workspaces<br>
+terraform workspace new dev             # Create new workspace<br>
+terraform workspace select dev          # Switch to workspace<br>
+terraform workspace delete dev          # Delete workspace<br>
+terraform workspace show                # Show current workspace
+            </div>
+
+            <h4>UNDER THE HOOD - FILES & OPERATIONS</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Storage</td>
+                        <td>Local: <code>.terraform/workspace/</code> directory</td>
+                    </tr>
+                    <tr>
+                        <td>State Files</td>
+                        <td>Each workspace has separate state</td>
+                    </tr>
+                    <tr>
+                        <td>Default Workspace</td>
+                        <td><code>default</code> always exists and can't be deleted</td>
+                    </tr>
+                    <tr>
+                        <td>Variables Scope</td>
+                        <td>Variables apply to all workspaces</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>EXAM GOTCHA</h4>
+            <div class="highlight-danger">
+                <strong>Question:</strong> "You create a workspace <code>prod</code> and deploy infrastructure. A colleague doesn't see your infrastructure. Why?"<br><br>
+                <strong>Answer:</strong> 🎯 <strong>Workspaces are LOCAL</strong><br>
+                Your colleague's <code>.terraform/workspace/prod/</code> is empty<br>
+                They need to run <code>terraform apply</code> independently<br><br>
+                <strong>This is why HCP Terraform is recommended:</strong><br>
+                Workspaces in HCP are SHARED<br>
+                Team members see same workspace and state
+            </div>
+
+            ---
+
+            <!-- terraform import -->
+            <div class="command-header">
+                <h3>8. terraform import</h3>
+            </div>
+
+            <h4>SYNTAX & EXAMPLES</h4>
+            <div class="syntax-table">
+terraform import resource_type.name resource_id<br><br>
+
+Examples:<br>
+terraform import aws_instance.web i-1234567890abcdef0<br>
+terraform import aws_security_group.allow sg-12345678<br>
+terraform import aws_rds_cluster.main my-db-cluster-name
+            </div>
+
+            <h4>UNDER THE HOOD - FILES & OPERATIONS</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Network</td>
+                        <td><strong>YES</strong> - queries cloud provider</td>
+                    </tr>
+                    <tr>
+                        <td>State File</td>
+                        <td>WRITE—adds resource to state</td>
+                    </tr>
+                    <tr>
+                        <td>Configuration</td>
+                        <td>Requires stub definition; import fills state only, NOT config</td>
+                    </tr>
+                    <tr>
+                        <td>Provider</td>
+                        <td>Must be configured and authenticated</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-warning">
+                <strong>Critical Import Process:</strong><br>
+                1. Resource definition exists in HCL (as stub): <code>resource "aws_instance" "web" {}</code><br>
+                2. Run: <code>terraform import aws_instance.web i-1234567890abcdef0</code><br>
+                3. Terraform queries AWS for resource details<br>
+                4. Terraform writes to state file ONLY (NOT configuration)<br>
+                5. You manually write HCL to match state
+            </div>
+
+            <h4>EXAM GOTCHA</h4>
+            <div class="highlight-danger">
+                <strong>Question:</strong> "You run <code>terraform import aws_instance.web i-123</code>. Now you run <code>terraform plan</code>. What happens?"<br><br>
+                <strong>Answer:</strong> ❌ Plan shows resource exists but configuration might be incomplete<br>
+                ✅ State has resource details<br>
+                ❌ HCL is just a stub<br>
+                ❌ Attributes aren't specified in HCL yet<br><br>
+                <strong>Safe procedure:</strong><br>
+                1. Import the resource<br>
+                2. Manually write HCL configuration to match state<br>
+                3. Run plan (should show no changes)
+            </div>
+        </section>
+
+        <!-- Advanced Commands Section -->
+        <section id="advanced">
+            <h2>🔧 ADVANCED COMMANDS</h2>
+
+            <!-- terraform fmt -->
+            <div class="command-header">
+                <h3>terraform fmt</h3>
+            </div>
+            <div class="syntax-table">
+terraform fmt                           # Format current directory<br>
+terraform fmt -recursive                # Format all .tf files in subdirectories<br>
+terraform fmt -check                   # Check if formatting needed<br>
+terraform fmt -write=false             # Check without modifying
+            </div>
+            <p><strong>Key Point:</strong> Local operation—no network, no state access. Used in CI/CD pipelines to enforce style.</p>
+
+            ---
+
+            <!-- Deprecated Commands -->
+            <div class="command-header">
+                <h3>⚠️ terraform taint / untaint (DEPRECATED)</h3>
+            </div>
+            <div class="highlight-warning">
+                <strong>Old way (marked for replacement):</strong><br>
+                <code>terraform taint aws_instance.web</code> — Mark for replacement<br>
+                <code>terraform untaint aws_instance.web</code> — Unmark<br><br>
+                <strong>Modern replacement (Terraform 1.6+):</strong><br>
+                <code>terraform apply -replace="aws_instance.web"</code><br><br>
+                <strong>Why deprecated?</strong> Imperative; newer way is cleaner
+            </div>
+        </section>
+
+        <!-- HCP Terraform Section -->
+        <section id="hcp">
+            <h2>🏢 HCP TERRAFORM (CLOUD) SECTION</h2>
+
+            <h3>WORKSPACE vs PROJECT Comparison</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th><strong>Workspace</strong></th>
+                        <th><strong>Project</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Definition</strong></td>
+                        <td>Terraform working directory; maps to state file</td>
+                        <td>Container for organizing multiple workspaces</td>
+                    </tr>
+                    <tr>
+                        <td><strong>How Many</strong></td>
+                        <td>1000s per organization</td>
+                        <td>Organize by team/app/environment</td>
+                    </tr>
+                    <tr>
+                        <td><strong>State File</strong></td>
+                        <td>ONE state per workspace</td>
+                        <td>Multiple workspaces (multiple state files)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Variables</strong></td>
+                        <td>Workspace-scoped</td>
+                        <td>Project-level (inherited by ALL workspaces)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Access Control</strong></td>
+                        <td>Fine-grained (per workspace)</td>
+                        <td>Team-level</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Typical Structure</strong></td>
+                        <td>dev, staging, prod</td>
+                        <td>my-app-project (contains workspaces)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>VARIABLE SET PRECEDENCE (CRITICAL FOR EXAM)</h3>
+            <h4>Precedence Order (Highest to Lowest Priority):</h4>
+            <div class="highlight-info">
+                <strong>1. Workspace Variables</strong> (explicit in workspace)<br>
+                <strong>2. Variable Set Variables</strong> (assigned to workspace)<br>
+                <strong>3. Environment Variables</strong> (TF_VAR_* in system)<br>
+                <strong>4. Terraform Variables</strong> (defaults in configuration)
+            </div>
+
+            <h4>Example Scenario:</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Source</th>
+                        <th>Value</th>
+                        <th>Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="4">region</td>
+                        <td>Config default</td>
+                        <td>us-west-1</td>
+                        <td>Lowest (4)</td>
+                    </tr>
+                    <tr>
+                        <td>Variable Set</td>
+                        <td>us-east-1</td>
+                        <td>Medium (2)</td>
+                    </tr>
+                    <tr>
+                        <td>Workspace variable</td>
+                        <td>eu-west-1</td>
+                        <td>Highest (1) ⭐</td>
+                    </tr>
+                    <tr>
+                        <td><em>Result</em></td>
+                        <td><strong>eu-west-1</strong></td>
+                        <td><strong>Winner</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Variable Set Assignment Logic:</h4>
+            <div class="highlight-success">
+                <strong>If variable exists in:</strong><br>
+                ✅ Workspace variables → USE IT (override all)<br>
+                ✅ Variable Set → USE IT (override defaults)<br>
+                ✅ Configuration default → USE IT<br>
+                ❌ NOT FOUND → ERROR
+            </div>
+
+            <h3>HCP TERRAFORM FEATURES SUMMARY</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Purpose</th>
+                        <th>Exam Relevance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>State Locking</strong></td>
+                        <td>Prevents concurrent applies</td>
+                        <td>HIGH</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Remote Runs</strong></td>
+                        <td>Plan/apply triggered from HCP UI</td>
+                        <td>HIGH</td>
+                    </tr>
+                    <tr>
+                        <td><strong>VCS Integration</strong></td>
+                        <td>Auto-trigger on Git push</td>
+                        <td>MEDIUM</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sentinel Policies</strong></td>
+                        <td>Policy-as-code enforcement</td>
+                        <td>MEDIUM</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Team Management</strong></td>
+                        <td>Role-based access</td>
+                        <td>MEDIUM</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Module Registry</strong></td>
+                        <td>Host private modules</td>
+                        <td>LOW</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Key Differences: Open-Source vs HCP Terraform</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Open-Source</th>
+                        <th>HCP Terraform</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>State File</strong></td>
+                        <td>Local or remote backend</td>
+                        <td>Managed by HCP (automatic)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Locking</strong></td>
+                        <td>Manual setup</td>
+                        <td>Built-in</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Runs</strong></td>
+                        <td>Local machine or CI/CD</td>
+                        <td>HCP-hosted (remote runs)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Team Collaboration</strong></td>
+                        <td>Manual state sharing</td>
+                        <td>Native support</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Policy Enforcement</strong></td>
+                        <td>External tools</td>
+                        <td>Sentinel policies (built-in)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Approval Workflow</strong></td>
+                        <td>Not built-in</td>
+                        <td>Built-in (Cost & Policy checks)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Quick Reference Section -->
+        <section id="quick-ref">
+            <h2>📋 EXAM QUICK-REFERENCE</h2>
+
+            <h3>Flags to Memorize (by priority)</h3>
+
+            <h4 class="tier-label">TIER 1 (Definitely on exam):</h4>
+            <ul class="command-card tier-1">
+                <li><code>plan -out=tfplan</code> (save plan)</li>
+                <li><code>apply tfplan</code> (apply saved plan)</li>
+                <li><code>apply -auto-approve</code> (skip confirmation)</li>
+                <li><code>-target=resource</code> (single resource)</li>
+                <li><code>-input=false</code> (CI/CD requirement)</li>
+            </ul>
+
+            <h4 class="tier-label">TIER 2 (Likely on exam):</h4>
+            <ul class="command-card tier-2">
+                <li><code>init -upgrade</code> (update providers)</li>
+                <li><code>plan -refresh-only</code> (check drift)</li>
+                <li><code>destroy -auto-approve</code> (skip confirmation)</li>
+                <li><code>import</code> (add existing resources)</li>
+                <li><code>state rm</code> (orphan resource)</li>
+            </ul>
+
+            <h4 class="tier-label">TIER 3 (Possible exam questions):</h4>
+            <ul class="command-card tier-3">
+                <li><code>-lock=false</code> (emergency only)</li>
+                <li><code>-lock-timeout</code> (wait for lock)</li>
+                <li><code>workspace list/new/select</code> (local only)</li>
+                <li><code>-replace=</code> (force replacement)</li>
+                <li><code>fmt -check</code> (CI/CD validation)</li>
+            </ul>
+
+            <h3>Critical Files to Know</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>File</th>
+                        <th>Purpose</th>
+                        <th>Commit to Git?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>.terraform.lock.hcl</code></td>
+                        <td>Provider version lock</td>
+                        <td><span class="badge badge-success">✅ YES</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>terraform.tfstate</code></td>
+                        <td>State file (local)</td>
+                        <td><span class="badge badge-danger">❌ NO (secrets!)</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>terraform.tfstate.backup</code></td>
+                        <td>Previous state backup</td>
+                        <td><span class="badge badge-danger">❌ NO</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>.terraform/</code></td>
+                        <td>Provider binaries</td>
+                        <td><span class="badge badge-danger">❌ NO (gitignore)</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>.terraform.tfvars</code></td>
+                        <td>Secret variables</td>
+                        <td><span class="badge badge-danger">❌ NO (gitignore)</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>*.tfvars</code></td>
+                        <td>Variable values</td>
+                        <td><span class="badge badge-warning">⚠️ Depends</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Gotchas Summary</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Gotcha</th>
+                        <th>Reality</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>"Can I validate before init?"</td>
+                        <td>❌ NO—need <code>.terraform/</code> first</td>
+                    </tr>
+                    <tr>
+                        <td>"Does plan modify state?"</td>
+                        <td>❌ NO—read-only (unless <code>-refresh-only</code>)</td>
+                    </tr>
+                    <tr>
+                        <td>"Does apply guarantee safe changes?"</td>
+                        <td>❌ NO—someone might change state mid-plan</td>
+                    </tr>
+                    <tr>
+                        <td>"Does import copy configuration?"</td>
+                        <td>❌ NO—imports state only; write HCL manually</td>
+                    </tr>
+                    <tr>
+                        <td>"Are local workspaces shared with team?"</td>
+                        <td>❌ NO—each person gets separate workspaces</td>
+                    </tr>
+                    <tr>
+                        <td>"Can I run plan and apply simultaneously?"</td>
+                        <td>❌ NO—state lock blocks concurrency</td>
+                    </tr>
+                    <tr>
+                        <td>"Does destroy rollback if it fails?"</td>
+                        <td>❌ NO—partial destroy leaves broken state</td>
+                    </tr>
+                    <tr>
+                        <td>"Does taint command still work?"</td>
+                        <td>✅ YES but DEPRECATED—use <code>-replace=</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Things That Require Network (in exam):</h3>
+            <div class="highlight-info">
+                <strong>Requires Network:</strong><br>
+                ✅ <code>init</code> (downloads providers)<br>
+                ✅ <code>plan</code> (queries cloud API)<br>
+                ✅ <code>apply</code> (makes changes via API)<br>
+                ✅ <code>destroy</code> (deletes via API)<br>
+                ✅ <code>import</code> (fetches resource details)<br>
+                ✅ <code>state pull/push</code> (if remote backend)<br><br>
+
+                <strong>Does NOT Require Network:</strong><br>
+                ❌ <code>validate</code> (local only)<br>
+                ❌ <code>fmt</code> (local only)<br>
+                ❌ <code>state list/show/rm/mv</code> (if local)
+            </div>
+        </section>
+
+        <!-- Decision Tree Section -->
+        <section id="decision-tree">
+            <h2>🌳 COMMAND DECISION TREE</h2>
+            <div class="decision-tree">
+Need to create/modify infrastructure?
+├─ First time? → <strong>terraform init</strong>
+├─ Check syntax? → <strong>terraform validate</strong>
+├─ Preview changes? → <strong>terraform plan -out=tfplan</strong>
+├─ Apply changes? → <strong>terraform apply tfplan</strong>
+└─ Done
+
+Need to destroy infrastructure?
+├─ Destroy everything? → <strong>terraform destroy</strong>
+├─ Destroy one resource? → <strong>terraform destroy -target=resource</strong>
+└─ Keep in cloud, remove from Terraform? → <strong>terraform state rm</strong>
+
+Need to manage existing infrastructure?
+├─ Add to Terraform? → <strong>terraform import</strong>
+├─ Fix state? → <strong>terraform state [list|show|rm|mv]</strong>
+└─ Check drift? → <strong>terraform plan -refresh-only</strong>
+
+Code style issues?
+└─ Fix formatting → <strong>terraform fmt -recursive</strong>
+
+Team collaboration?
+└─ Switch to HCP Terraform (local workspaces are NOT shared)
+
+Multiple environments?
+├─ Local: <strong>terraform workspace [new|select]</strong>
+└─ Team: HCP Terraform projects & workspaces
+            </div>
+
+            <h3>48-HOUR EXAM PREP FOCUS</h3>
+            <div class="highlight-success">
+                <strong>Day 1 (Today - 6 hours):</strong><br>
+                1. ✅ Memorize command flags (Tier 1 + Tier 2)<br>
+                2. ✅ Understand state lock implications<br>
+                3. ✅ Practice: <code>plan -out → apply plan</code> workflow<br>
+                4. ✅ Know when to use <code>-auto-approve</code> (CI/CD only)<br><br>
+
+                <strong>Day 2 (Next 6 hours):</strong><br>
+                1. ✅ HCP Terraform: Workspace vs Project differences<br>
+                2. ✅ Variable Set precedence (practice scenarios)<br>
+                3. ✅ Import workflow (stub config + manual HCL)<br>
+                4. ✅ Workspace limitations (local, not shared)<br><br>
+
+                <strong>Last 6 Hours (Day before exam):</strong><br>
+                1. ✅ Take practice exam (focus on command flags)<br>
+                2. ✅ Review gotchas (state lock, import config)<br>
+                3. ✅ Practice decision tree (when to use each command)<br>
+                4. ✅ Rest & review critical flags
+            </div>
+        </section>
+
+        <!-- Final Strategy Section -->
+        <section>
+            <h2>🚀 FINAL EXAM STRATEGY</h2>
+
+            <h3>When you see command-based questions:</h3>
+            <ol>
+                <li>Identify what the question wants (create? destroy? import? check?)</li>
+                <li>Recall the decision tree</li>
+                <li>Check if flags change behavior (especially <code>-auto-approve</code>, <code>-target</code>, <code>-refresh-only</code>)</li>
+                <li>Verify if network is needed (rules out some options)</li>
+                <li>Remember: <strong>Saved plan is ALWAYS safer than unsaved</strong></li>
+            </ol>
+
+            <h3>When you see state questions:</h3>
+            <ol>
+                <li>Understand: State = truth of infrastructure</li>
+                <li>Workspace = separate state files</li>
+                <li>Lock = prevents concurrent changes</li>
+                <li>Drift = reality differs from state</li>
+            </ol>
+
+            <h3>When you see HCP Terraform questions:</h3>
+            <ol>
+                <li>Workspace = where infrastructure runs</li>
+                <li>Project = organizational container</li>
+                <li>Variable Set = reusable variables (lower priority than workspace vars)</li>
+                <li>Remote runs = HCP executes (not your machine)</li>
+            </ol>
+
+            <div class="highlight-success">
+                <h3>✅ CONFIDENCE CHECK</h3>
+                <strong>After reading this cheat sheet, you should know:</strong><br><br>
+                ✅ When to use <code>-auto-approve</code> (CI/CD, saved plans, destructive ops)<br>
+                ✅ Why you can't <code>validate</code> before <code>init</code><br>
+                ✅ What <code>state rm</code> does vs what <code>destroy</code> does<br>
+                ✅ How <code>import</code> works (state ✅, config ❌)<br>
+                ✅ Local workspaces are NOT team-shared (use HCP)<br>
+                ✅ Variable Set < Workspace var < Explicit command-line var<br>
+                ✅ <code>plan -out=tfplan</code> is always safer than unsaved plan<br>
+                ✅ Drift = reality ≠ state (use <code>plan -refresh-only</code> to detect)
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p><strong>🎯 GOOD LUCK ON YOUR EXAM! 🚀</strong></p>
+            <p>Last updated: Terraform 1.8+ | HCP Terraform (current)</p>
+            <p style="margin-top: 15px; font-size: 0.9em;">High-Intensity Command Reference | Exam-Focused | Zero Fluff</p>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Print functionality
+        function printPage() {
+            window.print();
+        }
+
+        // Table of contents generator
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth scrolling offset for sticky nav
+            document.documentElement.style.scrollBehavior = 'smooth';
+        });
+    </script>
+</body>
+</html>

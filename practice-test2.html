@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraform Associate 004 - Exam #2 Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 10px 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .stat-box label {
+            display: block;
+            color: #666;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-box .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option input[type="radio"],
+        .option input[type="checkbox"] {
+            margin-top: 4px;
+            margin-right: 12px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .option-text {
+            flex: 1;
+            color: #333;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #e8f5e9;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #ffebee;
+        }
+
+        .option.correct::after {
+            content: "✓ Correct";
+            color: #28a745;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .option.incorrect::after {
+            content: "✗ Incorrect";
+            color: #dc3545;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+        }
+
+        .explanation-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .explanation-text {
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            min-width: 150px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-reset {
+            background: #6c757d;
+            color: white;
+            min-width: 150px;
+        }
+
+        .btn-reset:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .results-container {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .results-container h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .results-details {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .result-item {
+            flex: 1;
+            min-width: 150px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-item h3 {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .result-item .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .feedback.excellent {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .feedback.good {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .feedback.fair {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .feedback.poor {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: space-between;
+        }
+
+        .btn-nav {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: auto;
+        }
+
+        .btn-nav:hover {
+            background: #764ba2;
+        }
+
+        .btn-nav:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            border-radius: 8px;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        footer a {
+            color: #89CFF0;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .stats {
+                flex-direction: column;
+            }
+
+            .stat-box {
+                min-width: 100%;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+        .question-view {
+            display: none;
+        }
+
+        .question-view.active {
+            display: block;
+        }
+
+        .all-questions {
+            display: none;
+        }
+
+        .all-questions.active {
+            display: block;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-bottom: 3px solid #667eea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            justify-content: center;
+        }
+
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="004-cheat-sheet.html">Cheat Sheet</a></li>
+            <li><a href="practice-test1.html">Practice Exam 1</a></li>
+            <li><a href="practice-test2.html" class="active">Practice Exam 2</a></li>
+            <li><a href="practice-test3.html">Practice Exam 3</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Terraform Associate 004 - Exam #2 Practice</h1>
+            <p>57 Questions • Full-Length Practice Test</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <label>Progress</label>
+                <div class="value" id="progressCount">0/57</div>
+            </div>
+            <div class="stat-box">
+                <label>Correct</label>
+                <div class="value" id="correctCount" style="color: #28a745;">0</div>
+            </div>
+            <div class="stat-box">
+                <label>Incorrect</label>
+                <div class="value" id="incorrectCount" style="color: #dc3545;">0</div>
+            </div>
+            <div class="stat-box">
+                <label>Score</label>
+                <div class="value" id="scoreDisplay">0%</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn-nav" id="prevBtn" onclick="previousQuestion()" disabled>← Previous</button>
+            <span id="questionNav" style="text-align: center; color: #666;"></span>
+            <button class="btn-nav" id="nextBtn" onclick="nextQuestion()">Next →</button>
+        </div>
+
+        <div class="question-view active" id="questionView"></div>
+
+        <div class="all-questions" id="allQuestionsView"></div>
+
+        <div class="button-group">
+            <button class="btn-submit" id="viewToggle" onclick="toggleView()">View All Questions</button>
+            <button class="btn-submit" onclick="submitQuiz()">Submit Quiz</button>
+            <button class="btn-reset" onclick="resetQuiz()">Reset</button>
+        </div>
+
+        <div class="results-container" id="resultsContainer">
+            <h2>Quiz Complete! 🎉</h2>
+            <div class="score-display" id="finalScore"></div>
+            <div class="results-details">
+                <div class="result-item">
+                    <h3>Total Questions</h3>
+                    <div class="number" id="totalQuestionsResult">57</div>
+                </div>
+                <div class="result-item">
+                    <h3>Correct Answers</h3>
+                    <div class="number" id="correctResult">0</div>
+                </div>
+                <div class="result-item">
+                    <h3>Incorrect Answers</h3>
+                    <div class="number" id="incorrectResult">0</div>
+                </div>
+                <div class="result-item">
+                    <h3>Pass Rate (70% needed)</h3>
+                    <div class="number" id="passRateResult">0%</div>
+                </div>
+            </div>
+            <div class="feedback" id="feedbackMessage"></div>
+            <button class="btn-reset" onclick="resetQuiz()" style="margin-top: 20px;">Try Again</button>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p><strong>Terraform Associate 004 - Practice Exam</strong></p>
+            <p style="margin-bottom: 15px;">© 2026 Terraform Study Hub</p>
+            <p style="margin-bottom: 15px; font-size: 0.95em;"><strong>Developed by Nishant Modi</strong></p>
+            <div class="footer-links">
+                <a href="https://nishantmodi.github.io/About-NishantModi/" target="_blank">Portfolio</a>
+                <a href="https://www.linkedin.com/in/nishant-modi%E2%98%81-25979016" target="_blank">LinkedIn</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                question: "In an expression, how do you correctly reference the build-tag value from the variable declaration?",
+                type: "single",
+                options: [
+                    { text: "lookup(var.metadata, build-tag, \"\")", correct: false, explanation: "The lookup function in Terraform is used to retrieve a value from a map variable based on a specified key. The correct way is var.metadata[\"build-tag\"]." },
+                    { text: "var[\"metadata\"][\"build-tag\"]", correct: false, explanation: "The syntax var[\"metadata\"][\"build-tag\"] is not correct. To access the build-tag value, use var.metadata[\"build-tag\"]." },
+                    { text: "var.metadata[\"build-tag\"]", correct: true, explanation: "To correctly reference the build-tag value, use var.metadata[\"build-tag\"]. This syntax allows you to access the value associated with the key build-tag in the map variable metadata." },
+                    { text: "var.metadata.build-tag", correct: false, explanation: "Using var.metadata.build-tag is incorrect. When accessing a value with a key in a map, use var.metadata[\"key\"] syntax." }
+                ],
+                explanation: "Map values with special characters in keys must use bracket notation with quotes, not dot notation.",
+                objective: "4d - Understand and use complex types"
+            },
+            {
+                id: 2,
+                question: "Your team has been using Terraform to manage infrastructure. A colleague manually created a database in the console for urgent troubleshooting and testing. What is the primary reason to use Terraform import in this situation?",
+                type: "single",
+                options: [
+                    { text: "To create a backup of the database configuration in case the manual console settings are lost.", correct: false, explanation: "Terraform import is not used to create backups. Its purpose is to bring existing resources under Terraform management." },
+                    { text: "To validate that the manually created database meets your organization's security compliance requirements.", correct: false, explanation: "Terraform import does not validate compliance requirements." },
+                    { text: "To automatically generate optimized Terraform code that improves the database's performance settings.", correct: false, explanation: "Terraform import does not optimize configurations." },
+                    { text: "To bring the database under Terraform management so future changes can be tracked and managed through your IaC workflow.", correct: true, explanation: "Using Terraform import allows you to bring the manually created database under Terraform management, ensuring future changes can be tracked and managed consistently." }
+                ],
+                explanation: "The primary purpose of Terraform import is to bring existing infrastructure under Terraform management for consistent IaC workflow.",
+                objective: "7a - Import existing infrastructure into your Terraform workspace"
+            },
+            {
+                id: 3,
+                question: "Why should a user specify provider version constraints in their Terraform configuration?",
+                type: "single",
+                options: [
+                    { text: "providers are released on a separate schedule from Terraform itself; therefore, a newer version could introduce breaking changes", correct: true, explanation: "Providers are developed independently of Terraform and may introduce breaking changes, making version constraints essential." },
+                    { text: "to ensure that the provider version matches the version of Terraform you are using", correct: false, explanation: "While coordination is important, the primary reason is to prevent breaking changes from newer provider versions." },
+                    { text: "to match the version number of your application being deployed via Terraform", correct: false, explanation: "This is not the main reason for specifying provider version constraints." },
+                    { text: "to remove older versions of the provider", correct: false, explanation: "Specifying version constraints does not remove older versions." }
+                ],
+                explanation: "Providers are independent from Terraform and released on different schedules, requiring explicit version constraints for stability.",
+                objective: "2a - Install and version Terraform providers"
+            },
+            {
+                id: 4,
+                question: "You have an existing Google Cloud Storage bucket that was created manually. You want to bring it under Terraform management using a modern config-driven approach with an import block. What should you do?",
+                type: "single",
+                options: [
+                    { text: "run terraform plan followed by terraform apply to import the resource", correct: true, explanation: "With import blocks, you declare the import in configuration and then run terraform plan and terraform apply to perform the import." },
+                    { text: "run terraform init followed by terraform import", correct: false, explanation: "This is the older imperative import workflow, not the config-driven approach with import blocks." },
+                    { text: "run terraform import google_storage_bucket.data_lake bk-existing-bucket", correct: false, explanation: "Don't use the import command when using import blocks. Use terraform plan and terraform apply instead." },
+                    { text: "run terraform apply -import-only to import without other changes", correct: false, explanation: "The -import-only flag is not the recommended approach. Use terraform plan and terraform apply." }
+                ],
+                explanation: "Modern Terraform import blocks use terraform plan and terraform apply, not the imperative terraform import command.",
+                objective: "3e - Apply changes to infrastructure with Terraform"
+            },
+            {
+                id: 5,
+                question: "True or False? Terraform can only manage dependencies between resources if the depends_on argument is explicitly set for the dependent resources.",
+                type: "single",
+                options: [
+                    { text: "True", correct: false, explanation: "Terraform automatically detects implicit dependencies based on resource references in the configuration." },
+                    { text: "False", correct: true, explanation: "Terraform automatically detects implicit dependencies based on resource references, so depends_on is not always necessary." }
+                ],
+                explanation: "Terraform builds a dependency map based on interpolation and resource references, allowing implicit dependency detection.",
+                objective: "4f - Define resource dependencies in configuration"
+            },
+            {
+                id: 6,
+                question: "True or False? Marking an output as sensitive does not prevent its value from being stored in the Terraform state file.",
+                type: "single",
+                options: [
+                    { text: "True", correct: true, explanation: "Marking an output as sensitive only affects CLI display; the value is still stored in state." },
+                    { text: "False", correct: false, explanation: "Marking as sensitive does not prevent storage in state, only affects CLI output." }
+                ],
+                explanation: "The sensitive argument only redacts values in CLI output and logs, not in the state file.",
+                objective: "4h - Understand best practices for managing sensitive data"
+            },
+            {
+                id: 7,
+                question: "Which Terraform command will force a resource to be destroyed and recreated even if there are no configuration changes that would require it?",
+                type: "single",
+                options: [
+                    { text: "terraform destroy", correct: false, explanation: "terraform destroy destroys all resources, not a specific resource." },
+                    { text: "terraform apply -refresh-only", correct: false, explanation: "terraform apply -refresh-only updates state without creating/destroying resources." },
+                    { text: "terraform apply -replace=<address>", correct: true, explanation: "terraform apply -replace=<address> forces a specific resource to be destroyed and recreated." },
+                    { text: "terraform fmt", correct: false, explanation: "terraform fmt formats configuration files only." }
+                ],
+                explanation: "The -replace flag forces Terraform to mark a resource for replacement regardless of configuration changes.",
+                objective: "3f - Destroy Terraform-managed infrastructure"
+            },
+            {
+                id: 8,
+                question: "You run terraform plan in a workspace that has existing infrastructure. Terraform shows it will update 3 resources, create 2 new resources, and destroy 1 resource. How does Terraform determine what changes need to be made?",
+                type: "single",
+                options: [
+                    { text: "Terraform compares the desired state in the configuration with the current state in the state file to build the plan", correct: true, explanation: "Terraform compares desired state (configuration) with current state (state file) to determine necessary changes." },
+                    { text: "Terraform reads the previous plan output file and applies any changes that weren't completed", correct: false, explanation: "Terraform generates a new plan each time, not based on previous plans." },
+                    { text: "Terraform uses specific cloud provider services to identify resources that have drifted", correct: false, explanation: "Terraform uses state file comparisons, not cloud provider discovery." },
+                    { text: "Terraform queries the cloud provider APIs to discover all resources and compares them to the configuration file", correct: false, explanation: "Terraform only refreshes resources already in state, not all resources in the provider." }
+                ],
+                explanation: "The plan is created by comparing configuration (desired state) with state file (current state).",
+                objective: "2d - Explain how Terraform uses and manages state"
+            },
+            {
+                id: 9,
+                question: "In the snippet below, where does the value for vpc_security_group_ids come from in the module call?",
+                type: "single",
+                options: [
+                    { text: "an environment variable being used during a terraform apply", correct: false, explanation: "The value comes from module output, not environment variables." },
+                    { text: "from a variable likely declared in a .tfvars file being passed to the module", correct: false, explanation: "The value comes from another module's output." },
+                    { text: "the output of another module", correct: true, explanation: "vpc_security_group_ids comes from module.vpc.default_security_group_id, which is an output from the vpc module." },
+                    { text: "the Terraform public registry", correct: false, explanation: "The value comes from the vpc module output." }
+                ],
+                explanation: "Module outputs from other module calls can be referenced as inputs to other modules.",
+                objective: "5c - Use modules in configuration"
+            },
+            {
+                id: 10,
+                question: "Your company has a centralized network team that manages all Azure Virtual Networks. Your application team needs to deploy virtual machines into the prod-network VNet. What is the correct approach in your Terraform configuration?",
+                type: "single",
+                options: [
+                    { text: "create a new resource block for the VNet with the same name, then create your VM resources", correct: false, explanation: "Creating duplicate resources causes conflicts with centrally managed infrastructure." },
+                    { text: "use a resource block to import the existing VNet into your state, then create your VM resources", correct: false, explanation: "Importing the VNet creates conflicts with the network team's management." },
+                    { text: "use a data block to reference the existing VNet, then create your VM resources that use attributes from the data source", correct: true, explanation: "Use a data block to query and reference the existing VNet without taking ownership of it in your state." },
+                    { text: "contact the network team to add a depends_on relationship between their VNet and your VMs", correct: false, explanation: "This is not the correct approach; use data blocks for references." }
+                ],
+                explanation: "Data blocks allow you to reference existing infrastructure without managing it in your state file.",
+                objective: "4a - Use and differentiate resource and data blocks"
+            },
+            {
+                id: 11,
+                question: "Your team has multiple infrastructure projects with different compliance requirements. Some projects require advisory policy checks while others need mandatory enforcement. How should you configure policies in HCP Terraform to meet these varying requirements?",
+                type: "single",
+                options: [
+                    { text: "Configure different enforcement levels for each policy set and apply them to the appropriate workspaces or projects.", correct: true, explanation: "HCP Terraform supports advisory, soft mandatory, and hard mandatory policy enforcement levels that can be applied to specific workspaces or projects." },
+                    { text: "Enable policies at the organizational level, then disable enforcement in workspaces that do not require it.", correct: false, explanation: "This approach can lead to inconsistencies; configure enforcement at the policy set level instead." },
+                    { text: "Create separate HCP Terraform organizations for each compliance level.", correct: false, explanation: "This creates unnecessary complexity; use policy enforcement levels within the same organization." },
+                    { text: "Use run triggers to enforce policies based on workspace names that match the required compliance requirements.", correct: false, explanation: "Run triggers are for automation, not policy enforcement." }
+                ],
+                explanation: "HCP Terraform policy sets support multiple enforcement levels for flexible governance.",
+                objective: "8b - Describe HCP Terraform collaboration and governance features"
+            },
+            {
+                id: 12,
+                question: "Your team uses Vault for short-lived credentials and stores Terraform state in a remote backend. Which statements reflect best practices for managing sensitive data and state? (select four)",
+                type: "multiple",
+                options: [
+                    { text: "Marking an output sensitive = true prevents its value from being stored in the state file.", correct: false, explanation: "Marking as sensitive does NOT prevent storage in state; it only redacts CLI output." },
+                    { text: "Terraform state can include sensitive data, so it is essential to restrict access to the state and audit any changes.", correct: true, explanation: "Restricting access and auditing state changes are critical security practices." },
+                    { text: "A properly configured remote backend improves security via encryption and access controls.", correct: true, explanation: "Remote backends provide encryption at rest and RBAC for enhanced security." },
+                    { text: "Using Vault ensures that secrets never appear in state, so additional controls on state aren't required.", correct: false, explanation: "Vault helps but additional state controls are still necessary." },
+                    { text: "When using local state, the state file is stored in plain text by default", correct: true, explanation: "Local state is stored as plain-text JSON and is a security risk." },
+                    { text: "HCP Terraform encrypts state at rest (and in transit) and provides RBAC to restrict who can access state", correct: true, explanation: "HCP Terraform provides encryption and role-based access controls for state security." }
+                ],
+                explanation: "State security is critical as it can contain sensitive data. Use remote backends with encryption and access controls.",
+                objective: "4h - Understand best practices for managing sensitive data"
+            },
+            {
+                id: 13,
+                question: "True or False? Multiple providers can be declared within a single Terraform configuration file.",
+                type: "single",
+                options: [
+                    { text: "True", correct: true, explanation: "Multiple providers can indeed be declared within a single configuration file for multi-cloud deployments." },
+                    { text: "False", correct: false, explanation: "Multiple providers are commonly used in the same configuration file." }
+                ],
+                explanation: "A single configuration can declare and use multiple providers from different cloud platforms.",
+                objective: "2c - Write Terraform configuration using multiple providers"
+            },
+            {
+                id: 14,
+                question: "Rahul deployed multiple VMs outside the Terraform workflow. Your team is unsure which VM is managed by Terraform. What approach would best help identify the Terraform-managed VM without making any changes to the infrastructure?",
+                type: "single",
+                options: [
+                    { text: "Delete every VM that isn't clearly documented, assuming any missing VM will be recreated by Terraform.", correct: false, explanation: "This is dangerous and can cause data loss." },
+                    { text: "Use Terraform state commands terraform state show to match the tracked VM's ID with the list of active VMs.", correct: true, explanation: "terraform state show and terraform state list allow you to identify tracked resources without making changes." },
+                    { text: "Update your Terraform configuration to reference each VM ID and run terraform plan to see which resource shows no changes.", correct: false, explanation: "This is inefficient and modifies configuration." },
+                    { text: "Use the provider's CLI or API to label all VMs, then rely on Terraform to overwrite any unlabeled instances.", correct: false, explanation: "This changes infrastructure and is not recommended." }
+                ],
+                explanation: "Terraform state commands allow safe inspection of managed resources.",
+                objective: "7b - Use the CLI to inspect state"
+            },
+            {
+                id: 15,
+                question: "True or False? After successfully applying a moved block to refactor your resources, you should immediately remove the moved block from your configuration to keep your code clean.",
+                type: "single",
+                options: [
+                    { text: "True", correct: false, explanation: "You should keep moved blocks for at least one full apply cycle." },
+                    { text: "False", correct: true, explanation: "Keep moved blocks for at least one full apply cycle so all team members and automation can update their state." }
+                ],
+                explanation: "Removing moved blocks too soon can cause Terraform to think the old resource was destroyed.",
+                objective: "6d - Manage resource drift and Terraform state"
+            },
+            {
+                id: 16,
+                question: "A root module includes several variables in terraform.tfvars. You add a child module. What values can the child module access by default?",
+                type: "single",
+                options: [
+                    { text: "Any root variables, as long as they are defined by a locals block, since locals are global across the configuration.", correct: false, explanation: "Locals are scoped to the module where they are defined, not global." },
+                    { text: "Only values passed to it via the module block since root variables are not automatically accessible inside the module.", correct: true, explanation: "Child modules have no implicit access to parent variables; they must be passed explicitly via the module block." },
+                    { text: "Only values that are defined as outputs in the root module since outputs are always available to children in the same run.", correct: false, explanation: "Child modules cannot access parent outputs; outputs flow upward, not downward." },
+                    { text: "All of the root variables from terraform.tfvars since children inherit parent variable values automatically.", correct: false, explanation: "Child modules do not inherit parent variables automatically." }
+                ],
+                explanation: "Module variable scope is explicit; values must be passed via the module block arguments.",
+                objective: "5b - Describe variable scope within modules"
+            },
+            {
+                id: 17,
+                question: "You want to start managing resources that were not originally provisioned through infrastructure as code. Before you can import the resources, what must you do before running the terraform import command?",
+                type: "single",
+                options: [
+                    { text: "modify the Terraform state file to add the new resources so Terraform will have a record of the resources to be managed", correct: false, explanation: "Never manually modify the state file. Use the import command or import blocks instead." },
+                    { text: "add import blocks to the configuration to indicate what resources you want to bring under Terraform management", correct: false, explanation: "Import blocks are optional; you can use either import blocks OR the terraform import command." },
+                    { text: "update the Terraform configuration file to include new resource blocks that match the resources you want to import", correct: true, explanation: "Before running terraform import, you must write resource blocks that match the resources you want to import." },
+                    { text: "run terraform apply -refresh-only to ensure that the state file has the latest information for existing resources.", correct: false, explanation: "terraform apply -refresh-only is not required before importing." }
+                ],
+                explanation: "Resource blocks must be defined in configuration before using terraform import command.",
+                objective: "7a - Import existing infrastructure into your Terraform workspace"
+            },
+            {
+                id: 18,
+                question: "Which of the following options correctly demonstrates the HCL syntax for assigning a value to a variable declared with the type map(string)?",
+                type: "single",
+                options: [
+                    { text: "default = { \"environment\" = \"production\", \"owner\" = \"dev-team\" }", correct: true, explanation: "This correctly demonstrates map(string) syntax with key-value pairs enclosed in curly braces." },
+                    { text: "default = [ { environment = \"production\", owner = \"dev-team\" }, { environment = \"staging\", owner = \"qa-team\" }, ]", correct: false, explanation: "This uses square brackets, which is incorrect for a map; it would be a list of maps." },
+                    { text: "default = { \"environment\" = \"production\", \"critical\" = true }", correct: false, explanation: "This uses boolean value true, but map(string) requires all values to be strings." },
+                    { text: "default [ \"environment\" = \"production\", \"owner\" = \"dev-team\" ]", correct: false, explanation: "This uses square brackets and incorrect syntax for a map." }
+                ],
+                explanation: "Map(string) requires curly braces with string keys and string values.",
+                objective: "4d - Understand and use complex types"
+            },
+            {
+                id: 19,
+                question: "One of your application teams needs to share third-party credentials across multiple workspaces. What is the most appropriate way to configure HCP Terraform and easily meet these requirements? (select three)",
+                type: "multiple",
+                options: [
+                    { text: "Group the team's workspaces into a project", correct: true, explanation: "Grouping workspaces into a project enables centralized management and sharing of resources." },
+                    { text: "Configure a run trigger to copy the sensitive variables to each workspace", correct: false, explanation: "Run triggers don't copy variables; use variable sets instead." },
+                    { text: "In each workspace, create a variable for each credential and mark it as sensitive", correct: false, explanation: "This creates duplication; use variable sets instead." },
+                    { text: "Apply the variable set to the project", correct: true, explanation: "Applying a variable set to the project shares variables across all workspaces in that project." },
+                    { text: "Create a variable set that include the third-party credentials", correct: true, explanation: "Variable sets are the best way to share credentials across multiple workspaces." }
+                ],
+                explanation: "HCP Terraform variable sets enable centralized credential sharing across workspaces.",
+                objective: "8c - Describe how to organize and use HCP Terraform workspaces and projects"
+            },
+            {
+                id: 20,
+                question: "True or False? All remote backends in Terraform support state locking by default, so you never need to worry about concurrent modifications when using any remote backend.",
+                type: "single",
+                options: [
+                    { text: "True", correct: false, explanation: "Not all remote backends support state locking by default." },
+                    { text: "False", correct: true, explanation: "Some backends like S3 require additional configuration (DynamoDB) for state locking." }
+                ],
+                explanation: "Backend state locking support varies; verify your backend supports and is configured for locking.",
+                objective: "6b - Describe state locking"
+            },
+            {
+                id: 21,
+                question: "You have created a brand-new Terraform repo that has no backend block. After successfully running your first terraform apply, where does Terraform store state by default?",
+                type: "single",
+                options: [
+                    { text: "in an S3 bucket found under the module path in a file that matches the project name", correct: false, explanation: "Terraform does not use S3 by default." },
+                    { text: "in the directory $HOME/.terraform/state/ in a file named terraform.tfstate", correct: false, explanation: "Terraform does not use this directory." },
+                    { text: "in the current working directory in a file named terraform.tfstate", correct: true, explanation: "With no backend configured, Terraform uses the local backend, storing state in terraform.tfstate in the current directory." },
+                    { text: "in a temporary OS directory in a file name with a randomly created filename", correct: false, explanation: "Terraform uses a fixed filename in the current directory." }
+                ],
+                explanation: "The local backend is the default, storing state in terraform.tfstate in the working directory.",
+                objective: "6a - Describe the local backend"
+            },
+            {
+                id: 22,
+                question: "In the top-level terraform block, which setting specifies a provider's source and version constraints?",
+                type: "single",
+                options: [
+                    { text: "backend", correct: false, explanation: "The backend setting configures state storage, not provider constraints." },
+                    { text: "provider", correct: false, explanation: "Provider blocks configure provider-specific settings, not version constraints at the top level." },
+                    { text: "required_providers", correct: true, explanation: "The required_providers setting specifies provider sources and version constraints." },
+                    { text: "required_version", correct: false, explanation: "required_version specifies the Terraform CLI version, not provider versions." }
+                ],
+                explanation: "The required_providers block in the terraform block specifies provider versions and sources.",
+                objective: "2a - Install and version Terraform providers"
+            },
+            {
+                id: 23,
+                question: "Your team maintains a map of common tags to apply to all resources. Each individual resource also needs its own specific tags. You have var.common_tags and local.resource_tags. How do you combine both to apply to a resource?",
+                type: "single",
+                options: [
+                    { text: "join(var.common_tags, local.resource_tags)", correct: false, explanation: "join() is for concatenating strings, not combining maps." },
+                    { text: "concat(var.common_tags, local.resource_tags)", correct: false, explanation: "concat() is for concatenating lists, not maps." },
+                    { text: "flatten(var.common_tags, local.resource_tags)", correct: false, explanation: "flatten() flattens lists, not maps." },
+                    { text: "merge(var.common_tags, local.resource_tags)", correct: true, explanation: "merge() combines two maps into a single map, perfect for combining common and resource-specific tags." }
+                ],
+                explanation: "The merge() function combines multiple maps into a single map.",
+                objective: "4e - Write dynamic configuration using expressions and functions"
+            },
+            {
+                id: 24,
+                question: "You're refactoring a large Terraform configuration, splitting a monolithic file into multiple smaller files. Before running terraform plan, what's the fastest way to verify you didn't introduce any syntax errors?",
+                type: "single",
+                options: [
+                    { text: "run terraform plan", correct: false, explanation: "terraform plan is comprehensive but slow for quick syntax checking." },
+                    { text: "run terraform fmt -recursive", correct: false, explanation: "terraform fmt formats but doesn't validate syntax." },
+                    { text: "run terraform init", correct: false, explanation: "terraform init initializes but doesn't validate syntax." },
+                    { text: "run terraform validate", correct: true, explanation: "terraform validate is the fastest way to check syntax without accessing remote services." }
+                ],
+                explanation: "terraform validate checks syntax and consistency without remote provider calls.",
+                objective: "3c - Validate a Terraform configuration"
+            },
+            {
+                id: 25,
+                question: "You've updated a module and run terraform plan with default settings against the workspace's remote state. What happens when the command is executed?",
+                type: "single",
+                options: [
+                    { text: "Terraform applies the changes required in the target infrastructure in order to reach the desired configuration", correct: false, explanation: "terraform apply does this, not terraform plan." },
+                    { text: "Terraform reconciles the state it knows about with the real-world infrastructure", correct: false, explanation: "This is incomplete; terraform plan also creates an execution plan." },
+                    { text: "Terraform creates an execution plan and determines what changes are required to achieve the desired state in the configuration files.", correct: true, explanation: "terraform plan creates an execution plan showing what changes would be made without applying them." },
+                    { text: "Terraform initializes the backend and the working directory is prepped", correct: false, explanation: "terraform init does this, not terraform plan." }
+                ],
+                explanation: "terraform plan creates an execution plan without making any infrastructure changes.",
+                objective: "3d - Generate and review an execution plan for Terraform"
+            },
+            {
+                id: 26,
+                question: "A module creates VMs with the vSphere provider. It includes hard-coded values like datastore = \"DS1\", network_label = \"VM Network\", and folder = \"Dev/Apps\". You need the same module to work in Lab, QA, and Prod environments without code changes. What is the most appropriate change?",
+                type: "single",
+                options: [
+                    { text: "Convert the hard-coded values to input variables and provide environment-specific settings via tfvars or variable sets at plan/apply.", correct: true, explanation: "Input variables enable module reuse across environments with environment-specific values." },
+                    { text: "Add preconditions that fail when the environment differs, forcing operators to update the file when switching sites.", correct: false, explanation: "Preconditions don't solve the reuse problem." },
+                    { text: "Put the values in locals and commit separate branches per environment so the module references different locals.", correct: false, explanation: "Separate branches create maintenance overhead." },
+                    { text: "Create outputs for these values and reference them from a second \"override\" module that runs after the first.", correct: false, explanation: "This adds unnecessary complexity." }
+                ],
+                explanation: "Input variables are the standard way to make modules reusable across different environments.",
+                objective: "4c - Use variables and outputs"
+            },
+            {
+                id: 27,
+                question: "What are the three core steps that make up the Terraform workflow? (select three)",
+                type: "multiple",
+                options: [
+                    { text: "Apply - Provision reproducible infrastructure.", correct: true, explanation: "Apply is the third core step that provisions infrastructure." },
+                    { text: "Import - Bring in existing infrastructure resources under management", correct: false, explanation: "Import is useful but not one of the three core workflow steps." },
+                    { text: "Destroy - Deprovision and remove all infrastructure resources", correct: false, explanation: "Destroy is important but not part of the core three-step workflow." },
+                    { text: "Plan - Preview changes before applying.", correct: true, explanation: "Plan is the second core step that previews changes." },
+                    { text: "Write - Author infrastructure as code.", correct: true, explanation: "Write is the first core step that creates infrastructure code." },
+                    { text: "Validate - Verify the syntax and internal consistency", correct: false, explanation: "Validate is useful but not one of the three core workflow steps." }
+                ],
+                explanation: "The core Terraform workflow is Write, Plan, Apply.",
+                objective: "3a - Describe the Terraform workflow"
+            },
+            {
+                id: 28,
+                question: "Your team manages infrastructure across multiple AWS regions. You want to see a complete list of all resources currently tracked in your Terraform state file, but don't need detailed attributes. Which command should you use?",
+                type: "single",
+                options: [
+                    { text: "terraform state show", correct: false, explanation: "terraform state show displays detailed attributes of a specific resource." },
+                    { text: "terraform show", correct: false, explanation: "terraform show displays detailed information about all resources." },
+                    { text: "terraform output", correct: false, explanation: "terraform output extracts output variable values." },
+                    { text: "terraform state list", correct: true, explanation: "terraform state list quickly lists all resources without detailed attributes." }
+                ],
+                explanation: "terraform state list provides a concise list of all managed resources.",
+                objective: "7b - Use the CLI to inspect state"
+            },
+            {
+                id: 29,
+                question: "Which of the following actions are performed during a terraform init? (select three)",
+                type: "multiple",
+                options: [
+                    { text: "initializes the backend configuration", correct: true, explanation: "terraform init initializes the backend configuration for state management." },
+                    { text: "downloads the providers/plugins required to execute the configuration", correct: true, explanation: "terraform init downloads provider plugins from the registry." },
+                    { text: "downloads the required modules referenced in the configuration", correct: true, explanation: "terraform init downloads modules referenced in the configuration." },
+                    { text: "provisions the declared resources in your configuration", correct: false, explanation: "terraform apply provisions resources, not terraform init." }
+                ],
+                explanation: "terraform init initializes the working directory by downloading providers, modules, and configuring the backend.",
+                objective: "3b - Initialize a Terraform working directory"
+            },
+            {
+                id: 30,
+                question: "Your organization wants to ensure that third-party security scanning tools can review Terraform plans before any infrastructure changes are applied. Which HCP Terraform feature allows you to integrate external tools into the workflow between the plan and apply phases?",
+                type: "single",
+                options: [
+                    { text: "health checks", correct: false, explanation: "Health checks are not for integrating external tools." },
+                    { text: "change requests", correct: false, explanation: "Change requests are not for integrating external tools." },
+                    { text: "run tasks", correct: true, explanation: "Run tasks allow integration of external tools between plan and apply phases." },
+                    { text: "run triggers", correct: false, explanation: "Run triggers automate run queuing, not external tool integration." }
+                ],
+                explanation: "HCP Terraform run tasks enable integration of external tools and services in the plan-apply workflow.",
+                objective: "8b - Describe HCP Terraform collaboration and governance features"
+            },
+            {
+                id: 31,
+                question: "What is preventing you from producing a plan based on the error: \"Error: Invalid value for variable...You must specify a value for cluster_endpoint if create_cluster is false.\"?",
+                type: "single",
+                options: [
+                    { text: "The cluster_endpoint variable was declared as a number, but a string was provided, causing a type mismatch.", correct: false, explanation: "The error is about a missing value, not a type mismatch." },
+                    { text: "A precondition on a resource referencing cluster_endpoint failed after the plan is computed.", correct: false, explanation: "The error occurs during input evaluation, not after planning." },
+                    { text: "Provider authentication has failed during the state refresh step.", correct: false, explanation: "The error is about a variable validation, not authentication." },
+                    { text: "A validation block on cluster_endpoint requires a non-empty value when create_cluster=false, so input evaluation failed.", correct: true, explanation: "A validation block is enforcing that cluster_endpoint must have a value when create_cluster is false." }
+                ],
+                explanation: "Variable validation blocks enforce conditions before Terraform can proceed with planning.",
+                objective: "4g - Validate configuration using custom conditions"
+            },
+            {
+                id: 32,
+                question: "Management wants to understand how adopting Infrastructure as Code with Terraform differs from your current method of using the console and CLI. Which statement correctly identifies a major difference?",
+                type: "single",
+                options: [
+                    { text: "Infrastructure as Code only works with immutable infrastructure patterns.", correct: false, explanation: "IaC supports both mutable and immutable patterns." },
+                    { text: "Infrastructure as Code requires all resources to be created through APIs instead of UI consoles.", correct: false, explanation: "IaC uses APIs but the key difference is configuration management." },
+                    { text: "Infrastructure as Code allows infrastructure to be described using a configuration syntax that can be versioned, reused, and shared.", correct: true, explanation: "IaC enables declarative, version-controlled infrastructure definitions." },
+                    { text: "Infrastructure as Code eliminates the need for cloud provider APIs since all infrastructure is declared in code.", correct: false, explanation: "IaC still uses provider APIs but abstracts them through code." }
+                ],
+                explanation: "IaC fundamentally differs by enabling declarative, version-controlled infrastructure definitions.",
+                objective: "1a - Explain what IaC is"
+            },
+            {
+                id: 33,
+                question: "You are reviewing Terraform configuration in main.tf with a module servers block calling \"./modules/btk-cluster\". Which statements about this configuration are correct? (select two)",
+                type: "multiple",
+                options: [
+                    { text: "main.tf is the root (calling) module", correct: true, explanation: "main.tf is the root module that calls the child module btk-cluster." },
+                    { text: "Terraform will download btk-cluster from the public registry when running terraform init", correct: false, explanation: "The ./modules/btk-cluster path indicates a local module, not a registry module." },
+                    { text: "btk-cluster refers to a local child module on disk", correct: true, explanation: "The source ./modules/btk-cluster indicates a local module in the modules directory." },
+                    { text: "the argument servers must be declared as an output in the child module.", correct: false, explanation: "The servers argument is an input variable passed to the child module." }
+                ],
+                explanation: "Local modules are sourced from relative paths on disk, not from registries.",
+                objective: "5a - Explain how Terraform sources modules"
+            },
+            {
+                id: 34,
+                question: "In the example code, what order will Terraform create these resources: a google_compute_instance and google_compute_attached_disk that references the instance?",
+                type: "single",
+                options: [
+                    { text: "First - google_compute_attached_disk.data, Second - google_compute_instance.web", correct: false, explanation: "The attached_disk references the instance, creating an implicit dependency." },
+                    { text: "First - google_compute_instance.web, Second - google_compute_attached_disk.data", correct: true, explanation: "The implicit dependency ensures the VM is created before the disk is attached." },
+                    { text: "Terraform will create these in parallel since parallelism is set to 10 by default", correct: false, explanation: "Implicit dependencies prevent parallel creation." },
+                    { text: "Terraform will create them in file order, based on the block that appears first in the .tf file", correct: false, explanation: "Terraform uses dependencies, not file order." }
+                ],
+                explanation: "Terraform builds a dependency graph based on resource references, not file order.",
+                objective: "4b - Refer to resource attributes and create cross-resource references"
+            },
+            {
+                id: 35,
+                question: "In HCP Terraform, what scope levels are available for providing variables to workspaces? (select three)",
+                type: "multiple",
+                options: [
+                    { text: "All workspaces across multiple HCP Terraform organizations", correct: false, explanation: "Variables are scoped within an organization, not across organizations." },
+                    { text: "Multiple workspaces with a variable set", correct: true, explanation: "Variable sets can be applied to multiple workspaces." },
+                    { text: "A single workspace by defining variables directly in that workspace.", correct: true, explanation: "Workspace-specific variables can be defined directly in each workspace." },
+                    { text: "All current and future workspaces and Stacks within a project using a variable set.", correct: true, explanation: "Project-scoped variable sets apply to all workspaces in that project." }
+                ],
+                explanation: "HCP Terraform supports workspace-specific, project-scoped, and global variable set scopes.",
+                objective: "8c - Describe how to organize and use HCP Terraform workspaces and projects"
+            },
+            {
+                id: 36,
+                question: "In HCP Terraform, how many VCS repositories can a workspace be mapped to?",
+                type: "single",
+                options: [
+                    { text: "5", correct: false, explanation: "Workspaces are limited to a single VCS repository." },
+                    { text: "3", correct: false, explanation: "Workspaces are limited to a single VCS repository." },
+                    { text: "2", correct: false, explanation: "Workspaces are limited to a single VCS repository." },
+                    { text: "1", correct: true, explanation: "A workspace can only be mapped to one VCS repository." }
+                ],
+                explanation: "Each HCP Terraform workspace is associated with a single VCS repository.",
+                objective: "8a - Use HCP Terraform to create infrastructure"
+            },
+            {
+                id: 37,
+                question: "You maintain an existing Terraform configuration that uses a public module pinned to version 5.2.0. A new minor version 5.3.0 is available. What steps are required to update the module version safely? (select two)",
+                type: "multiple",
+                options: [
+                    { text: "update the version argument to allow 5.3.0 using version = \"~> 5.3.0\"", correct: true, explanation: "Update the version constraint to ~> 5.3.0 to allow the new minor version." },
+                    { text: "update the version argument to allow 5.3.0 using version = \"~> 5.2.0\"", correct: false, explanation: "~> 5.2.0 restricts to versions up to 5.3.0 but not including it." },
+                    { text: "run terraform init -upgrade to download the new module version", correct: true, explanation: "terraform init -upgrade downloads modules matching the new version constraint." },
+                    { text: "delete the .terraform.lock.hcl file so Terraform will fetch the latest module", correct: false, explanation: "Don't delete the lock file; let terraform init -upgrade update it." }
+                ],
+                explanation: "Update the version constraint and use terraform init -upgrade to safely update modules.",
+                objective: "5d - Manage module versions"
+            },
+            {
+                id: 38,
+                question: "What is the .terraform.lock.hcl file and when does Terraform create or modify it?",
+                type: "single",
+                options: [
+                    { text: "The .terraform.lock.hcl file is a state snapshot used by Terraform. It is created or updated every time you run terraform apply.", correct: false, explanation: "The lock file is not a state snapshot." },
+                    { text: "The .terraform.lock.hcl file contains backend connection and credentials settings. It is created or updated every time you modify the backend.", correct: false, explanation: "The lock file does not contain backend settings." },
+                    { text: "The .terraform.lock.hcl file is a dependency lock file used by Terraform. It is created or updated every time you run terraform init.", correct: true, explanation: "The lock file pins provider and module versions and is updated during terraform init." },
+                    { text: "The .terraform.lock.hcl file is a concurrency lock to prevent simultaneous runs. It is created or updated every time you run a terraform plan.", correct: false, explanation: "The lock file is not for concurrency control." }
+                ],
+                explanation: "The .terraform.lock.hcl dependency lock file ensures consistent provider and module versions across runs.",
+                objective: "3b - Initialize a Terraform working directory"
+            },
+            {
+                id: 39,
+                question: "You have a root module that calls child module modules/web. In modules/web/main.tf, a developer added name = \"${var.env}-app\". What is the correct way to make this work?",
+                type: "single",
+                options: [
+                    { text: "Define locals { env = var.env } in the root module since child modules inherit locals automatically", correct: false, explanation: "Locals are scoped to the module where defined; child modules don't inherit them." },
+                    { text: "Reference the parent directly: name = \"${parent.var.env}-app\" in the child module", correct: false, explanation: "parent references don't exist in Terraform." },
+                    { text: "Use the terraform workspace command in the child module to replace the need for var.env", correct: false, explanation: "Workspaces are not the solution." },
+                    { text: "Declare variable \"env\" {} in the child module and pass it from root using env = var.env", correct: true, explanation: "The child module must declare the variable and the root must pass it via the module block." }
+                ],
+                explanation: "Child modules must explicitly declare variables that are passed from parent modules.",
+                objective: "5b - Describe variable scope within modules"
+            },
+            {
+                id: 40,
+                question: "What happens when a terraform apply command is executed?",
+                type: "single",
+                options: [
+                    { text: "the backend is initialized and the working directory is prepped", correct: false, explanation: "terraform init does this." },
+                    { text: "creates the execution plan for the deployment of resources", correct: false, explanation: "terraform plan creates the execution plan." },
+                    { text: "applies the changes required in the target infrastructure in order to reach the desired configuration", correct: true, explanation: "terraform apply executes the planned changes to reach desired infrastructure state." },
+                    { text: "reconciles the state Terraform knows about with the real-world infrastructure", correct: false, explanation: "While this occurs, applying changes is the primary function." }
+                ],
+                explanation: "terraform apply executes the planned infrastructure changes.",
+                objective: "3e - Apply changes to infrastructure with Terraform"
+            },
+            {
+                id: 41,
+                question: "You discovered a module on the Terraform Registry that will provision the resources you need. What other information can you find on the Terraform Registry to help you quickly use this module? (select three)",
+                type: "multiple",
+                options: [
+                    { text: "dependencies to use the module", correct: true, explanation: "The registry lists dependencies required to use the module." },
+                    { text: "a list of outputs", correct: true, explanation: "The registry lists all outputs provided by the module." },
+                    { text: "a download button to quickly get the module code", correct: false, explanation: "Direct download buttons are not typically used; you reference modules by source." },
+                    { text: "required input variables", correct: true, explanation: "The registry documents all required and optional input variables." }
+                ],
+                explanation: "The Terraform Registry provides comprehensive module documentation including inputs, outputs, and dependencies.",
+                objective: "5a - Explain how Terraform sources modules"
+            },
+            {
+                id: 42,
+                question: "You're comparing local state versus remote state backends for your team's infrastructure. Which statements correctly describe key differences? (select three)",
+                type: "multiple",
+                options: [
+                    { text: "Remote backends provide centralized state access for team collaboration, while local state requires manual file sharing", correct: true, explanation: "Remote backends enable centralized management; local state requires manual coordination." },
+                    { text: "Local state supports more Terraform providers than remote backends because it has direct filesystem access", correct: false, explanation: "Provider support is independent of state backend type." },
+                    { text: "Remote backends typically provide encryption at rest and access controls for state data, while local state security depends entirely on filesystem permissions", correct: true, explanation: "Remote backends offer encryption and RBAC; local state relies on OS permissions." },
+                    { text: "Local state automatically provides encryption at rest and in transit, while remote backends store everything in plaintext", correct: false, explanation: "Local state is plaintext; remote backends offer encryption." },
+                    { text: "Local state is simple to set up with no additional infrastructure required, while remote backends require configuration and maintenance of backend services", correct: true, explanation: "Local state is simple but remote backends require backend service management." }
+                ],
+                explanation: "The key tradeoff is simplicity (local) vs. collaboration and security (remote).",
+                objective: "6b - Describe state locking"
+            },
+            {
+                id: 43,
+                question: "You're configuring an S3 backend for your Terraform project. You want to keep sensitive values out of version control while keeping other backend configuration in your code. Which approach correctly implements partial backend configuration?",
+                type: "single",
+                options: [
+                    { text: "store all backend configuration in terraform.tfvars since it supports backend settings and add it to .gitignore", correct: false, explanation: "terraform.tfvars doesn't support backend configuration." },
+                    { text: "create and define your own environment variables TF_BACKEND_BUCKET and TF_BACKEND_REGION to pass the bucket and region values", correct: false, explanation: "Custom environment variables don't work for backend configuration." },
+                    { text: "create a separate backends.tf file with the sensitive values and add it to .gitignore", correct: false, explanation: "This approach doesn't implement partial backend configuration." },
+                    { text: "define the backend block with only the type, then pass the bucket and region values using -backend-config flag during terraform init", correct: true, explanation: "Partial backend configuration uses the -backend-config flag to pass sensitive values at init time." }
+                ],
+                explanation: "Use the -backend-config flag to pass sensitive backend values without committing them.",
+                objective: "6c - Configure remote state using the backend block"
+            },
+            {
+                id: 44,
+                question: "You're moving a project to a remote backend so the state is stored in Amazon S3. How do you correctly configure and initialize the backend?",
+                type: "single",
+                options: [
+                    { text: "Create the S3 bucket using resource blocks and reference them from the backend using variables - run terraform apply", correct: false, explanation: "Backend arguments don't support interpolation." },
+                    { text: "Put the backend block inside a module and set the arguments using input variables - run terraform plan", correct: false, explanation: "Backend blocks can't be inside modules." },
+                    { text: "Set TF_INPUT and TF_DATA_DIR environment variables and run terraform init", correct: false, explanation: "These variables don't configure backends." },
+                    { text: "Define the S3 backend in the terraform block using a backend block - run terraform init to migrate your local state.", correct: true, explanation: "Define the backend and run terraform init to migrate state from local to remote." }
+                ],
+                explanation: "Define the backend in configuration and run terraform init to migrate state.",
+                objective: "6c - Configure remote state using the backend block"
+            },
+            {
+                id: 45,
+                question: "Which of the following best describes a Terraform provider?",
+                type: "single",
+                options: [
+                    { text: "serves as a parameter for a Terraform module that allows a module to be customized", correct: false, explanation: "This describes module parameters." },
+                    { text: "a container for multiple resources that are used together", correct: false, explanation: "This describes modules." },
+                    { text: "a plugin that Terraform uses to translate the API interactions with the service or provider", correct: true, explanation: "Providers are plugins that translate Terraform configuration into provider API calls." },
+                    { text: "describes an infrastructure object, such as a virtual network, compute instance, or other components", correct: false, explanation: "This describes resources." }
+                ],
+                explanation: "Providers are plugins that enable Terraform to interact with specific infrastructure platforms.",
+                objective: "2b - Describe how Terraform uses providers"
+            },
+            {
+                id: 46,
+                question: "After executing a terraform plan in your working directory, you notice that a resource has a tilde (~) next to it. What does this indicate?",
+                type: "single",
+                options: [
+                    { text: "Terraform can't determine how to proceed due to a problem with the state file", correct: false, explanation: "A tilde (~) indicates an in-place update." },
+                    { text: "the resource will be updated in place", correct: true, explanation: "The tilde (~) means the resource will be updated in place without destruction/recreation." },
+                    { text: "the resource will be created", correct: false, explanation: "Creation is indicated by a plus (+)." },
+                    { text: "the resource will be destroyed and recreated", correct: false, explanation: "Destruction/recreation is indicated by -/+." }
+                ],
+                explanation: "Plan symbols: ~ (update), + (create), - (destroy), -/+ (replace).",
+                objective: "3d - Generate and review an execution plan for Terraform"
+            },
+            {
+                id: 47,
+                question: "You're deploying a GCP Compute Engine instance and want to verify that the instance receives a public IP after creation. If it doesn't, you want Terraform to fail. Which validation mechanism should you use?",
+                type: "single",
+                options: [
+                    { text: "add a check block that references the instance", correct: false, explanation: "Check blocks are for cross-resource assertions." },
+                    { text: "add a postcondition in the lifecycle block of the instance resource", correct: true, explanation: "Postconditions validate resource state after creation, perfect for checking public IP assignment." },
+                    { text: "add a validation block to the instance resource", correct: false, explanation: "Validation blocks validate input variables." },
+                    { text: "add a precondition in the lifecycle block of the instance resource", correct: false, explanation: "Preconditions check state before creation." }
+                ],
+                explanation: "Postconditions in the lifecycle block validate resource state after creation.",
+                objective: "4g - Validate configuration using custom conditions"
+            },
+            {
+                id: 48,
+                question: "What benefits would you see by using a multi-cloud and provider-agnostic tool like Terraform? (select two)",
+                type: "multiple",
+                options: [
+                    { text: "Delivers a consistent declarative workflow and language across providers and hypervisors.", correct: true, explanation: "Terraform provides consistent HCL syntax and workflow across all providers." },
+                    { text: "Reduces operational overhead by allowing teams to learn and govern a single tool across all environments.", correct: true, explanation: "One tool for all clouds reduces training and governance complexity." },
+                    { text: "Programmatically standardizes pricing and usage models across all cloud platforms.", correct: false, explanation: "Terraform doesn't standardize pricing models." },
+                    { text: "Removes the need for provider-specific credentials or authentication flows.", correct: false, explanation: "Each provider still requires specific credentials." }
+                ],
+                explanation: "Terraform benefits come from consistent workflow and single-tool governance.",
+                objective: "1c - Explain how Terraform manages multi-cloud, hybrid cloud, and service-agnostic workflows"
+            },
+            {
+                id: 49,
+                question: "Your team wants to enforce consistent formatting across all Terraform files before merging code. You're setting up a CI/CD pipeline and need a command that checks whether files are properly formatted without making changes. Which command should you use?",
+                type: "single",
+                options: [
+                    { text: "terraform validate -format", correct: false, explanation: "This flag doesn't exist." },
+                    { text: "terraform fmt -check", correct: true, explanation: "terraform fmt -check validates formatting without making changes, perfect for CI/CD." },
+                    { text: "terraform fmt -validate", correct: false, explanation: "This flag doesn't exist." },
+                    { text: "terraform fmt -diff", correct: false, explanation: "This shows differences but doesn't check without applying." }
+                ],
+                explanation: "terraform fmt -check is designed for CI/CD pipelines to validate formatting.",
+                objective: "3g - Apply formatting and style adjustments to a configuration"
+            },
+            {
+                id: 50,
+                question: "Which of the following is considered a Terraform plugin?",
+                type: "single",
+                options: [
+                    { text: "variable", correct: false, explanation: "Variables are parameters, not plugins." },
+                    { text: "backend", correct: false, explanation: "Backends are configuration, not plugins." },
+                    { text: "provider", correct: true, explanation: "Providers are plugins that enable Terraform to interact with infrastructure platforms." },
+                    { text: "module", correct: false, explanation: "Modules are reusable configurations, not plugins." }
+                ],
+                explanation: "Providers are the only plugins in Terraform; they're binary executables that interact with cloud APIs.",
+                objective: "2b - Describe how Terraform uses providers"
+            },
+            {
+                id: 51,
+                question: "You have a SQL Database in production with live data. You need to change the pricing tier, but the change requires destroying and recreating the database. You want the new database created before the old one is destroyed to avoid downtime. What should you add?",
+                type: "single",
+                options: [
+                    { text: "add a depends_on argument pointing to the new database", correct: false, explanation: "depends_on doesn't solve the creation order problem." },
+                    { text: "add a count argument set to 2 to create both databases", correct: false, explanation: "count doesn't control creation order properly." },
+                    { text: "add a lifecycle block with prevent_destroy = true", correct: false, explanation: "prevent_destroy blocks destruction; we want replacement." },
+                    { text: "add a lifecycle block with create_before_destroy = true", correct: true, explanation: "create_before_destroy ensures the new database is created before the old one is destroyed." }
+                ],
+                explanation: "The create_before_destroy lifecycle setting ensures zero-downtime replacements.",
+                objective: "4f - Define resource dependencies in configuration"
+            },
+            {
+                id: 52,
+                question: "Bryan is drafting new Terraform code and wants to verify that the configuration is syntactically valid and internally consistent without contacting any remote services. Which command should he run?",
+                type: "single",
+                options: [
+                    { text: "terraform apply -refresh-only", correct: false, explanation: "This applies changes, not validates." },
+                    { text: "terraform fmt", correct: false, explanation: "This formats code only." },
+                    { text: "terraform show", correct: false, explanation: "This displays state or plan." },
+                    { text: "terraform validate", correct: true, explanation: "terraform validate checks syntax and consistency without remote calls." }
+                ],
+                explanation: "terraform validate is designed for quick syntax checking without provider interaction.",
+                objective: "3c - Validate a Terraform configuration"
+            },
+            {
+                id: 53,
+                question: "What are the advantages of using Infrastructure as Code? (select five)",
+                type: "multiple",
+                options: [
+                    { text: "Infrastructure as Code provides configuration consistency and standardization among deployments.", correct: true, explanation: "IaC ensures consistent, standardized configurations across environments." },
+                    { text: "Infrastructure as Code is easily repeatable, allowing the user to reuse code to deploy similar yet different resources.", correct: true, explanation: "Code reusability enables scaling and consistency." },
+                    { text: "Infrastructure as Code enables users to automate a manual task for easier deployment.", correct: true, explanation: "IaC automates infrastructure provisioning, reducing manual effort." },
+                    { text: "Infrastructure as Code gives the user the ability to recreate an application's infrastructure for disaster recovery scenarios", correct: true, explanation: "Infrastructure code enables rapid recovery and disaster preparedness." },
+                    { text: "Infrastructure as Code easily replaces development languages such as Go and .Net for application development", correct: false, explanation: "IaC is not for application development; it's for infrastructure." },
+                    { text: "Infrastructure as Code is relatively easy to learn and write, regardless of a user's prior coding experience.", correct: true, explanation: "HCL is designed to be accessible to non-programmers." }
+                ],
+                explanation: "IaC provides consistency, repeatability, automation, disaster recovery, and accessibility.",
+                objective: "1b - Describe the advantages of IaC patterns"
+            },
+            {
+                id: 54,
+                question: "You're troubleshooting an issue where Terraform is modifying certain resource attributes during apply that you didn't expect. You suspect the provider is interpreting your configuration differently. What is the primary benefit of enabling Terraform logging?",
+                type: "single",
+                options: [
+                    { text: "Logging will automatically fix the provider configuration errors and prevent the unexpected modifications.", correct: false, explanation: "Logging diagnoses issues; it doesn't fix them." },
+                    { text: "Logging will create a backup of your state file before any modifications are made.", correct: false, explanation: "Logging doesn't create backups." },
+                    { text: "Logging will show you the detailed interactions between Terraform and the provider API and help you identify where the unexpected behavior occurs", correct: true, explanation: "Logging reveals API interactions, helping diagnose unexpected behavior." },
+                    { text: "Logging will first validate your configuration syntax and highlight any errors in your resource blocks.", correct: false, explanation: "Logging shows interactions, not syntax validation." }
+                ],
+                explanation: "TF_LOG environment variable enables detailed logging of Terraform and provider interactions.",
+                objective: "7c - Describe when and how to use verbose logging"
+            },
+            {
+                id: 55,
+                question: "Which of the following Terraform files should be ignored by Git when committing code to a repo?",
+                type: "single",
+                options: [
+                    { text: "terraform.tf", correct: false, explanation: "This is configuration and should be committed." },
+                    { text: "terraform.tfstate", correct: true, explanation: "State files contain sensitive data and should not be committed to version control." },
+                    { text: ".terraform.lock.hcl", correct: false, explanation: "Lock files should be committed for consistency." },
+                    { text: "outputs.tf", correct: false, explanation: "Output definitions should be committed." }
+                ],
+                explanation: "Only the terraform.tfstate file should be ignored; all other files should be committed.",
+                objective: "6a - Describe the local backend"
+            },
+            {
+                id: 56,
+                question: "Before a new Terraform provider can be used in a configuration, what steps are required? (select two)",
+                type: "multiple",
+                options: [
+                    { text: "Initialize the working directory using terraform init to download and install the provider.", correct: true, explanation: "terraform init downloads provider plugins." },
+                    { text: "Declare and configure the provider in the configuration with the required arguments.", correct: true, explanation: "Provider blocks declare provider configuration." },
+                    { text: "Add the provider name and configuration to terraform.tfvars and pass it with -var at runtime.", correct: false, explanation: "terraform.tfvars is for variables, not provider configuration." },
+                    { text: "Run terraform validate to compile the configuration and fetch the plugin from the Terraform registry.", correct: false, explanation: "terraform validate doesn't fetch plugins." }
+                ],
+                explanation: "Provider declaration and terraform init are the two required steps.",
+                objective: "2a - Install and version Terraform providers"
+            },
+            {
+                id: 57,
+                question: "Which statements are true about provider configurations in modules? (select three)",
+                type: "multiple",
+                options: [
+                    { text: "Child modules automatically inherit the default provider configurations from their parent module", correct: true, explanation: "Child modules inherit default provider configurations." },
+                    { text: "The providers argument in a module block allows explicit passing of specific provider configurations", correct: true, explanation: "The providers argument enables explicit provider passing." },
+                    { text: "Modules containing provider blocks cannot be used with the for_each argument", correct: true, explanation: "Modules with provider blocks are incompatible with for_each, count, and depends_on." },
+                    { text: "Child modules must always define their own provider blocks for proper isolation", correct: false, explanation: "Child modules inherit from parents; they shouldn't define provider blocks." },
+                    { text: "Modules with provider blocks can still be used with depends_on if providers are passed explicitly", correct: false, explanation: "Modules with provider blocks cannot be used with depends_on." }
+                ],
+                explanation: "Modules inherit provider configs and can use the providers argument, but shouldn't define their own provider blocks.",
+                objective: "2c - Write Terraform configuration using multiple providers"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = {};
+        let answered = 0;
+        let correct = 0;
+        let isViewingAll = false;
+
+        function initQuiz() {
+            renderQuestion();
+            updateStats();
+        }
+
+        function renderQuestion() {
+            if (currentQuestion >= questions.length) {
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            const isMultiple = q.type === "multiple";
+            const answeredValue = userAnswers[q.id];
+
+            let html = `
+                <div class="question-container">
+                    <div class="question-number">Question ${q.id} of ${questions.length}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">
+            `;
+
+            q.options.forEach((option, idx) => {
+                const optionId = `q${q.id}_opt${idx}`;
+                const isAnswered = answeredValue ? (isMultiple ? answeredValue.includes(idx) : answeredValue === idx) : false;
+                const isCorrect = option.correct;
+                let className = "option";
+                if (isAnswered && isCorrect) className += " correct";
+                else if (isAnswered && !isCorrect) className += " incorrect";
+
+                const inputType = isMultiple ? "checkbox" : "radio";
+                const checked = isAnswered ? "checked" : "";
+
+                html += `
+                    <label class="${className}">
+                        <input type="${inputType}" name="q${q.id}" value="${idx}" ${checked} id="${optionId}" 
+                               onchange="recordAnswer(${q.id}, ${idx}, ${isMultiple})">
+                        <div class="option-text">${option.text}</div>
+                    </label>
+                `;
+            });
+
+            html += `</div>`;
+
+            // Show explanation if answered
+            if (answeredValue !== undefined) {
+                const answeredOptions = isMultiple ? answeredValue : [answeredValue];
+                html += `<div class="explanation show">
+                    <div class="explanation-title">Explanation:</div>
+                `;
+
+                answeredOptions.forEach(idx => {
+                    const option = q.options[idx];
+                    html += `<div class="explanation-text"><strong>${option.text}:</strong> ${option.explanation}</div>`;
+                });
+
+                html += `
+                    <div class="explanation-text" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                        <strong>Overall:</strong> ${q.explanation}
+                    </div>
+                </div>`;
+            }
+
+            html += `</div>`;
+
+            document.getElementById('questionView').innerHTML = html;
+            updateNavButtons();
+            updateQuestionNav();
+        }
+
+        function recordAnswer(questionId, optionIdx, isMultiple) {
+            const q = questions.find(x => x.id === questionId);
+            let answer = userAnswers[questionId];
+
+            if (isMultiple) {
+                if (!answer) answer = [];
+                if (answer.includes(optionIdx)) {
+                    answer = answer.filter(x => x !== optionIdx);
+                } else {
+                    answer.push(optionIdx);
+                }
+            } else {
+                answer = optionIdx;
+            }
+
+            userAnswers[questionId] = answer;
+
+            // Check if correct
+            const selectedCorrect = isMultiple ?
+                answer.every(idx => q.options[idx].correct) && answer.length === q.options.filter(o => o.correct).length :
+                q.options[answer].correct;
+
+            if (selectedCorrect && userAnswers[questionId] !== undefined) {
+                if (!Object.prototype.hasOwnProperty.call(userAnswers, `_correct_${questionId}`)) {
+                    correct++;
+                    userAnswers[`_correct_${questionId}`] = true;
+                }
+            } else {
+                if (userAnswers[`_correct_${questionId}`]) {
+                    correct--;
+                    delete userAnswers[`_correct_${questionId}`];
+                }
+            }
+
+            answered = Object.keys(userAnswers).filter(k => !k.startsWith('_correct_')).length;
+            updateStats();
+            renderQuestion();
+        }
+
+        function updateStats() {
+            document.getElementById('progressCount').textContent = `${answered}/${questions.length}`;
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('incorrectCount').textContent = answered - correct;
+            const percentage = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+            document.getElementById('scoreDisplay').textContent = `${percentage}%`;
+            const progress = (answered / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressBar').textContent = Math.round(progress) + '%';
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').disabled = currentQuestion === questions.length - 1;
+        }
+
+        function updateQuestionNav() {
+            document.getElementById('questionNav').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+        }
+
+        function toggleView() {
+            isViewingAll = !isViewingAll;
+            if (isViewingAll) {
+                renderAllQuestions();
+                document.getElementById('questionView').classList.remove('active');
+                document.getElementById('allQuestionsView').classList.add('active');
+                document.getElementById('viewToggle').textContent = 'View Single Question';
+                document.getElementById('prevBtn').style.display = 'none';
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('questionNav').style.display = 'none';
+            } else {
+                document.getElementById('questionView').classList.add('active');
+                document.getElementById('allQuestionsView').classList.remove('active');
+                document.getElementById('viewToggle').textContent = 'View All Questions';
+                document.getElementById('prevBtn').style.display = 'block';
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('questionNav').style.display = 'block';
+                renderQuestion();
+            }
+        }
+
+        function renderAllQuestions() {
+            let html = '';
+            questions.forEach(q => {
+                const isMultiple = q.type === "multiple";
+                const answeredValue = userAnswers[q.id];
+
+                html += `
+                    <div class="question-container">
+                        <div class="question-number">Question ${q.id}</div>
+                        <div class="question-text">${q.question}</div>
+                        <div class="options">
+                `;
+
+                q.options.forEach((option, idx) => {
+                    const optionId = `all_q${q.id}_opt${idx}`;
+                    const isAnswered = answeredValue ? (isMultiple ? answeredValue.includes(idx) : answeredValue === idx) : false;
+                    const isCorrect = option.correct;
+                    let className = "option";
+                    if (isAnswered && isCorrect) className += " correct";
+                    else if (isAnswered && !isCorrect) className += " incorrect";
+
+                    const inputType = isMultiple ? "checkbox" : "radio";
+                    const checked = isAnswered ? "checked" : "";
+
+                    html += `
+                        <label class="${className}">
+                            <input type="${inputType}" name="q${q.id}" value="${idx}" ${checked} id="${optionId}" 
+                                   onchange="recordAnswer(${q.id}, ${idx}, ${isMultiple})">
+                            <div class="option-text">${option.text}</div>
+                        </label>
+                    `;
+                });
+
+                html += `</div>`;
+
+                // Show explanation if answered
+                if (answeredValue !== undefined) {
+                    const answeredOptions = isMultiple ? answeredValue : [answeredValue];
+                    html += `<div class="explanation show">
+                        <div class="explanation-title">Explanation:</div>
+                    `;
+
+                    answeredOptions.forEach(idx => {
+                        const option = q.options[idx];
+                        html += `<div class="explanation-text"><strong>${option.text}:</strong> ${option.explanation}</div>`;
+                    });
+
+                    html += `
+                        <div class="explanation-text" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                            <strong>Overall:</strong> ${q.explanation}
+                        </div>
+                    </div>`;
+                }
+
+                html += `</div><hr style="margin: 30px 0; border: none; border-top: 2px solid #ddd;">`;
+            });
+
+            document.getElementById('allQuestionsView').innerHTML = html;
+        }
+
+        function submitQuiz() {
+            const totalAnswered = answered;
+            const totalCorrect = correct;
+            const score = totalAnswered > 0 ? Math.round((totalCorrect / questions.length) * 100) : 0;
+            const passScore = 70;
+
+            document.getElementById('finalScore').textContent = `${score}%`;
+            document.getElementById('correctResult').textContent = totalCorrect;
+            document.getElementById('incorrectResult').textContent = questions.length - totalCorrect;
+            document.getElementById('totalQuestionsResult').textContent = questions.length;
+            document.getElementById('passRateResult').textContent = score + '%';
+
+            let feedback = '';
+            let feedbackClass = '';
+
+            if (score >= 90) {
+                feedback = '🌟 Excellent! You have mastered the Terraform Associate concepts!';
+                feedbackClass = 'excellent';
+            } else if (score >= passScore) {
+                feedback = '✅ Great! You passed the practice exam and are ready for the real exam!';
+                feedbackClass = 'good';
+            } else if (score >= 50) {
+                feedback = '📚 Good effort! Review the failed topics and try again to improve your score.';
+                feedbackClass = 'fair';
+            } else {
+                feedback = '💪 Keep practicing! Review all the concepts and take the exam again.';
+                feedbackClass = 'poor';
+            }
+
+            const feedbackElem = document.getElementById('feedbackMessage');
+            feedbackElem.className = `feedback ${feedbackClass}`;
+            feedbackElem.textContent = feedback;
+
+            document.getElementById('resultsContainer').classList.add('show');
+            document.getElementById('questionView').classList.remove('active');
+            document.getElementById('allQuestionsView').classList.remove('active');
+            document.getElementById('viewToggle').style.display = 'none';
+            document.getElementById('prevBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('questionNav').style.display = 'none';
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            userAnswers = {};
+            answered = 0;
+            correct = 0;
+            isViewingAll = false;
+            document.getElementById('resultsContainer').classList.remove('show');
+            document.getElementById('questionView').classList.add('active');
+            document.getElementById('allQuestionsView').classList.remove('active');
+            document.getElementById('viewToggle').style.display = 'block';
+            document.getElementById('viewToggle').textContent = 'View All Questions';
+            document.getElementById('prevBtn').style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'block';
+            document.getElementById('questionNav').style.display = 'block';
+            updateStats();
+            initQuiz();
+        }
+
+        // Initialize quiz on load
+        window.addEventListener('load', initQuiz);
+    </script>
+</body>
+</html>
